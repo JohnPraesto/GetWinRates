@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="points-container">
+
+        <div class="color-container">
+            <div class="headline-container">
+                <h2>Färg</h2>
+            </div>
+            <div class="text-container">
+                <p class="for-input">Blå</p>
+                <p class="for-input">Röd</p>
+                <p class="for-input">Grön</p>
+            </div>
+            <div class="input-container">
+                <input id="blue-input" type="number">
+                <input id="red-input" type="number">
+                <input id="green-input" type="number">
+            </div>
+        </div>
+
+        <div class="shape-container">
+            <div class="headline-container">
+                <h2>Form</h2>
+            </div>
+            <div class="text-container">
+                <p class="for-input">Cirkel</p>
+                <p class="for-input">Triangel</p>
+                <p class="for-input">Kvadrat</p>
+            </div>
+            <div class="input-container">
+                <input id="circle-input" type="number">
+                <input id="triangle-input" type="number">
+                <input id="square-input" type="number">
+            </div>
+        </div>
+        <div class="pattern-container">
+            <div class="headline-container">
+                <h2>Mönster</h2>
+            </div>
+            <div class="text-container">
+                <p class="for-input">Rutig</p>
+                <p class="for-input">Randig</p>
+                <p class="for-input">Prickig</p>
+            </div>
+            <div class="input-container">
+                <input id="chequered-input" type="number">
+                <input id="striped-input" type="number">
+                <input id="dotted-input" type="number">
+            </div>
+        </div>
+        <button id="go" onClick="calculateSum()">Kör</button>
+        <button id="generate" onClick="generateNumbers()">Slumpa nummer</button>
+    </div>
+
+    <div class="result-container"></div>
+
+    <div class="result-container2"></div>
+
+    <script src="script.js"></script>
+    
+</body>
+</html>
+

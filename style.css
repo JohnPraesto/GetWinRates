@@ -1,0 +1,121 @@
+body{
+    margin: 0;
+    display: flex;
+}
+
+.points-container{
+    display: flex;
+    background-color: rgb(220, 219, 235);
+    height: 100vh;
+    width: 15vw;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.color-container{
+    background-color: rgb(220, 200, 235);
+}
+
+.shape-container{
+    background-color: rgb(210, 200, 235);
+}
+
+.pattern-container{
+    background-color: rgb(200, 200, 235);
+}
+
+.color-container,
+.shape-container,
+.pattern-container{
+    height: 23%;
+    width: 90%;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: 40% 60%;
+    grid-template-rows: 30% 70%;
+}
+
+.text-container{
+    grid-area: 2 / 2 / 2 / 1;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.input-container{
+    grid-area: 2 / 2 / 2 / 3;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.headline-container{
+    grid-area: 1 / 1 / 1 / 3;
+    margin: 0;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+input{
+    width: 85%;
+    font-size: 15px;
+}
+
+.for-input{
+    font-size: 20px;
+    margin: 0px 0px 0px 20px;
+}
+
+#go{
+    height: 13%;
+    width: 90%;
+    font-size: 50px;
+}
+
+#generate{
+    height: 13%;
+    width: 90%;
+    font-size: 50px;
+}
+
+.result-container{
+    background-color: rgb(231, 224, 231);
+    width: 41%;
+    height: 97.7vh;
+    border: 1px solid;  
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center; /* eller flex-end */
+    justify-content: center;
+    flex-direction: column;
+    font-family: 'Consolas', 'Courier New', Courier, monospace;
+}
+
+.result-container2{
+    background-color: rgb(231, 224, 231);
+    width: 41.5%;
+    height: 97.7vh;
+    border: 1px solid;  
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-family: 'Consolas', 'Courier New', Courier, monospace;
+}
+
+output{
+    font-size: 60px;
+    border: 1px solid rgb(192, 192, 192);
+    margin: 3px;
+}
