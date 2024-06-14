@@ -1,3 +1,112 @@
+function orderNumbers() { // Borde gå att make DRY
+
+    // FIGHTERS
+
+    // Create new output elements for valid results
+    var resultContainer2 = document.querySelector('.result-container2');
+    var outputs = resultContainer2.getElementsByTagName('output');
+    var numbers = [];
+
+    // Collect the numbers from the outputs
+    for (var i = 0; i < outputs.length; i++) {
+        var text = outputs[i].textContent;
+        var number = parseInt(text.match(/\d+/)[0]); // Extract the number
+        numbers.push({ model: text.replace(number, '').trim(), value: number });
+    }
+
+    // Sort the numbers in descending order
+    numbers.sort(function(a, b) {
+        return b.value - a.value;
+    });
+
+    // Clear previous results
+    resultContainer2.innerHTML = '';
+
+    // Append sorted outputs
+    for (var i = 0; i < numbers.length; i++) {
+        makeOutput(numbers[i].value, numbers[i].model, resultContainer2);
+    }
+
+    // COLOR //
+
+    // Create new output elements for valid results
+    resultContainer = document.querySelector('.result-category-color');
+    outputs = resultContainer.getElementsByTagName('output');
+    numbers = [];
+
+    // Collect the numbers from the outputs
+    for (var i = 0; i < outputs.length; i++) {
+        var text = outputs[i].textContent;
+        var number = parseInt(text.match(/\d+/)[0]); // Extract the number
+        numbers.push({ model: text.replace(number, '').trim(), value: number });
+    }
+
+    // Sort the numbers in descending order
+    numbers.sort(function(a, b) {
+        return b.value - a.value;
+    });
+
+    // Clear previous results
+    resultContainer.innerHTML = '';
+
+    // Append sorted outputs
+    for (var i = 0; i < numbers.length; i++) {
+        makeOutput(numbers[i].value, numbers[i].model, resultContainer);
+    }
+
+    // Gör en array som bara består av numrena från numbers-arrayen
+    values = numbers.map(function(element) {
+        return element.value;
+    });
+    // Det högsta minus det minsta värdet gör variationsbredden på procenten för color
+    var highestValue = Math.max(...values);
+    var lowestValue = Math.min(...values);
+    var procentWidth = highestValue - lowestValue;
+    resultContainer = document.querySelector('#color-wide-id');
+    resultContainer.innerHTML = '';
+    makeOutput(procentWidth, "Bredd: ", document.querySelector('#color-wide-id'));
+
+    // SHAPES
+
+    // Create new output elements for valid results
+    resultContainer = document.querySelector('.result-category-shape');
+    outputs = resultContainer.getElementsByTagName('output');
+    numbers = [];
+
+    // Collect the numbers from the outputs
+    for (var i = 0; i < outputs.length; i++) {
+        var text = outputs[i].textContent;
+        var number = parseInt(text.match(/\d+/)[0]); // Extract the number
+        numbers.push({ model: text.replace(number, '').trim(), value: number });
+    }
+
+    // Sort the numbers in descending order
+    numbers.sort(function(a, b) {
+        return b.value - a.value;
+    });
+
+    // Clear previous results
+    resultContainer.innerHTML = '';
+
+    // Append sorted outputs
+    for (var i = 0; i < numbers.length; i++) {
+        makeOutput(numbers[i].value, numbers[i].model, resultContainer);
+    }
+
+    // Gör en array som bara består av numrena från numbers-arrayen
+    values = numbers.map(function(element) {
+        return element.value;
+    });
+    // Det högsta minus det minsta värdet gör variationsbredden på procenten för color
+    highestValue = Math.max(...values);
+    lowestValue = Math.min(...values);
+    procentWidth = highestValue - lowestValue;
+    resultContainer = document.querySelector('#shape-wide-id');
+    resultContainer.innerHTML = '';
+    makeOutput(procentWidth, "Bredd: ", document.querySelector('#shape-wide-id'));
+    
+}
+
 function generateNumbers() {
     // Generate random numbers between 0 and 1000
     var randomBlueNumber = Math.floor(Math.random() * 1001);
@@ -14,6 +123,15 @@ function generateNumbers() {
     document.getElementById('circle-input').value = randomCircleNumber;
     document.getElementById('triangle-input').value = randomTriangleNumber;
     document.getElementById('square-input').value = randomSquareNumber;
+
+    // Lägger de slumpade numrena i en array
+    const colorsArray = [randomBlueNumber, randomRedNumber, randomGreenNumber];
+    const shapeArray = [randomCircleNumber, randomTriangleNumber, randomSquareNumber];
+
+    document.getElementById('color-average-box').value = ((randomBlueNumber + randomRedNumber + randomGreenNumber) / 3).toFixed(0);
+    document.getElementById('shape-average-box').value = ((randomCircleNumber + randomTriangleNumber + randomSquareNumber) / 3).toFixed(0);
+    document.getElementById('color-wide-box').value = Math.max(...colorsArray)-Math.min(...colorsArray);
+    document.getElementById('shape-wide-box').value = Math.max(...shapeArray)-Math.min(...shapeArray);
 }
 
 function calculateSum() {
@@ -97,14 +215,14 @@ function calculateSum() {
     resultContainer2.innerHTML = '';
 
     makeOutput(blueCircleWinRate, "Blå cirkel: ", resultContainer2)
-    makeOutput(blueTriangleWinRate, "Blå triangel: ", resultContainer2)
-    makeOutput(blueSquareWinRate, "Blå kvadrat: ", resultContainer2)
+    makeOutput(blueTriangleWinRate, "Blå tringl: ", resultContainer2)
+    makeOutput(blueSquareWinRate, "Blå kvdrat: ", resultContainer2)
     makeOutput(redCircleWinRate, "Röd cirkel: ", resultContainer2)
-    makeOutput(redTriangleWinRate, "Röd triangel: ", resultContainer2)
-    makeOutput(redSquareWinRate, "Röd kvadrat: ", resultContainer2)
-    makeOutput(greenCircleWinRate, "Grön cirkel: ", resultContainer2)
-    makeOutput(greenTriangleWinRate, "Grön triangel: ", resultContainer2)
-    makeOutput(greenSquareWinRate, "Grön kvadrat: ", resultContainer2)
+    makeOutput(redTriangleWinRate, "Röd tringl: ", resultContainer2)
+    makeOutput(redSquareWinRate, "Röd kvdrat: ", resultContainer2)
+    makeOutput(greenCircleWinRate, "Grn cirkel: ", resultContainer2)
+    makeOutput(greenTriangleWinRate, "Grn tringl: ", resultContainer2)
+    makeOutput(greenSquareWinRate, "Grn kvdrat: ", resultContainer2)
 
     // Ta fram den genomsnittliga poängen för alla fighters med en bestämd färg
     var blueAvgValue = (blueCirclePoints + blueTrianglePoints + blueSquarePoints) / colorFilledInputs;
@@ -145,23 +263,30 @@ function calculateSum() {
 
 
     // Create new output elements for valid results
-    var resultContainer = document.querySelector('.result-container');
+    var resultContainer = document.querySelector('.result-category-color');
 
     // Clear previous results
     resultContainer.innerHTML = '';
 
     // Append valid results to the result container
-    makeOutput(finalBlueWinRate, "Blå: ", resultContainer);
+    makeOutput(finalBlueWinRate, "_____Blå: ", resultContainer);
 
-    makeOutput(finalRedWinRate, "Röd: ", resultContainer);
+    makeOutput(finalRedWinRate, "_____Röd: ", resultContainer);
 
-    makeOutput(finalGreenWinRate, "Grön: ", resultContainer);
+    makeOutput(finalGreenWinRate, "____Grön: ", resultContainer);
 
-    makeOutput(finalCircleWinRate, "Cirkel: ", resultContainer);
+
+    // Create new output elements for valid results
+    var resultContainer = document.querySelector('.result-category-shape');
+
+    // Clear previous results
+    resultContainer.innerHTML = '';
+
+    makeOutput(finalCircleWinRate, "__Cirkel: ", resultContainer);
 
     makeOutput(finalTriangleWinRate, "Triangel: ", resultContainer);
 
-    makeOutput(finalSquareWinRate, "Kvadrat: ", resultContainer);
+    makeOutput(finalSquareWinRate, "_Kvadrat: ", resultContainer);
 }
 
 // Denna function tar fram, för varje container, antalet ifyllda input-fält

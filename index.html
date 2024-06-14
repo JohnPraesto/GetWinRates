@@ -18,11 +18,15 @@
                 <p class="for-input">Blå</p>
                 <p class="for-input">Röd</p>
                 <p class="for-input">Grön</p>
+                <p class="no-input">Snitt</p>
+                <p class="no-input">Bredd</p>
             </div>
             <div class="input-container">
                 <input id="blue-input" type="number">
                 <input id="red-input" type="number">
                 <input id="green-input" type="number">
+                <input id="color-average-box">
+                <input id="color-wide-box">
             </div>
         </div>
 
@@ -34,11 +38,15 @@
                 <p class="for-input">Cirkel</p>
                 <p class="for-input">Triangel</p>
                 <p class="for-input">Kvadrat</p>
+                <p class="no-input">Snitt</p>
+                <p class="no-input">Bredd</p>
             </div>
             <div class="input-container">
                 <input id="circle-input" type="number">
                 <input id="triangle-input" type="number">
                 <input id="square-input" type="number">
+                <input id="shape-average-box">
+                <input id="shape-wide-box">
             </div>
         </div>
         <div class="pattern-container">
@@ -56,11 +64,21 @@
                 <input id="dotted-input" type="number">
             </div>
         </div>
-        <button id="go" onClick="calculateSum()">Kör</button>
-        <button id="generate" onClick="generateNumbers()">Slumpa nummer</button>
+
+        <div class="button-container">
+            <button id="go" onClick="calculateSum()">Kör</button>
+            <button id="generate" onClick="generateNumbers()">Slumpa</button>
+            <button id="order" onClick="orderNumbers()">Ordna</button>
+        </div>
+        
     </div>
 
-    <div class="result-container"></div>
+    <div class="result-container">
+        <div id="color-wide-id" class="procent-wide-container"></div>
+        <div class="result-category-color"></div>
+        <div class="result-category-shape"></div>
+        <div id="shape-wide-id" class="procent-wide-container"></div>
+    </div>
 
     <div class="result-container2"></div>
 

@@ -72,15 +72,42 @@ input{
     margin: 0px 0px 0px 20px;
 }
 
-#go{
-    height: 13%;
+.no-input{
+    font-size: 20px;
+    margin: 0px 0px 0px 20px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+#color-average-box, #color-wide-box, #shape-average-box, #shape-wide-box{
+    color:grey;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+}
+
+.button-container{
+    height: 23%;
     width: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content:space-between;
+    align-items:center;
+}
+
+#go{
+    height: 31%;
+    width: 100%;
     font-size: 50px;
 }
 
 #generate{
-    height: 13%;
-    width: 90%;
+    height: 31%;
+    width: 100%;
+    font-size: 50px;
+}
+
+#order{
+    height: 31%;
+    width: 100%;
     font-size: 50px;
 }
 
@@ -97,6 +124,34 @@ input{
     justify-content: center;
     flex-direction: column;
     font-family: 'Consolas', 'Courier New', Courier, monospace;
+}
+
+.result-category-color, .result-category-shape{
+    /* background-color: rgb(228, 161, 74); */
+    margin: 5px;
+    width: 100%;
+    height: 100%;
+}
+
+.result-category-color{
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
+}
+
+.result-category-shape{
+    display: flex;
+    flex-direction: column;
+}
+
+.procent-wide-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: grey;
 }
 
 .result-container2{
