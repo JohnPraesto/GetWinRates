@@ -117,12 +117,12 @@ function generateNumbers() {
     var randomSquareNumber = Math.floor(Math.random() * 1001);
 
     // Fill the input fields with the generated numbers
-    document.getElementById('blue-input').value = randomBlueNumber;
-    document.getElementById('red-input').value = randomRedNumber;
-    document.getElementById('green-input').value = randomGreenNumber;
-    document.getElementById('circle-input').value = randomCircleNumber;
-    document.getElementById('triangle-input').value = randomTriangleNumber;
-    document.getElementById('square-input').value = randomSquareNumber;
+    document.getElementById('blue-points').value = randomBlueNumber;
+    document.getElementById('red-points').value = randomRedNumber;
+    document.getElementById('green-points').value = randomGreenNumber;
+    document.getElementById('circle-points').value = randomCircleNumber;
+    document.getElementById('triangle-points').value = randomTriangleNumber;
+    document.getElementById('square-points').value = randomSquareNumber;
 
     // Lägger de slumpade numrena i en array
     const colorsArray = [randomBlueNumber, randomRedNumber, randomGreenNumber];
@@ -135,14 +135,6 @@ function generateNumbers() {
 }
 
 function calculateSum() {
-    // Get the values entered by the user
-    var blueValue = parseInt(document.getElementById("blue-input").value);
-    var redValue = parseInt(document.getElementById("red-input").value);
-    var greenValue = parseInt(document.getElementById("green-input").value);
-    var circleValue = parseInt(document.getElementById("circle-input").value);
-    var triangleValue = parseInt(document.getElementById("triangle-input").value);
-    var squareValue = parseInt(document.getElementById("square-input").value);
-    var chequeredValue = parseInt(document.getElementById("chequered-input").value);
 
     // Totala antalet matcher är antalet egenskaper som finns i varje kategori gånger varandra (=X) i kvadrat minus X
     // Exempel: det finns 2 färger och 3 former.
@@ -151,25 +143,35 @@ function calculateSum() {
     // 36 - 6 = 30
     // Behöver hämta in hur många fält som är ifyllda i varje kategori.
 
-    // Ta fram antalet egenskaper för varje kategori
-    const colorFilledInputs = countFilledInputs('color-container');
-    const shapeFilledInputs = countFilledInputs('shape-container');
-    const patternFilledInputs = countFilledInputs('pattern-container');
+    // The size of these maps is number of inputs filled in the each container. It is used for division later on.
+    // The key/value-pairs are used as points variables.
+    const colorsMap = createInputMap('color-container');
+    const shapesMap = createInputMap('shape-container');
+    const patternsMap = createInputMap('pattern-container');
+
+    arrayOfMaps = [colorsMap, shapesMap, patternsMap];
 
     // Ta fram antalet kombinationer av egenskaper
-    var totalFeatures = colorFilledInputs * shapeFilledInputs /** patternFilledInputs*/;
+    let totalFeatures = 1; // Vad gör denna variabel matematiskt?
+    arrayOfMaps.forEach(map => {
+        if (map.size > 0){
+            totalFeatures *= map.size;
+            }
+        }
+    )
+    console.log(totalFeatures);
 
     // Ta fram antal individuella möten. (Totalt antal matcher, typ)
     var totalIndividualMatches = (totalFeatures * totalFeatures) - totalFeatures;
 
     // Ta fram hur många matcher varje egenskap har gått.
-    var totalIndividualMatchesPerColor = totalIndividualMatches / colorFilledInputs;
-    var totalIndividualMatchesPerShape = totalIndividualMatches / shapeFilledInputs;
+    var totalIndividualMatchesPerColor = totalIndividualMatches / colorsMap.size;
+    var totalIndividualMatchesPerShape = totalIndividualMatches / shapesMap.size;
     // var totalIndividualMatchesPerPattern = totalIndividualMatches / patternFilledInputs;
 
     // Ta fram hur många gånger varje egenskap mött sin egen egenskap i motståndaren. (Tex Blå cirkel möter Blå kvadrat.)
-    var numberOfDomesticMatchesColor = (shapeFilledInputs * shapeFilledInputs) - shapeFilledInputs;
-    var numberOfDomesticMatchesShape = (colorFilledInputs * colorFilledInputs) - colorFilledInputs;
+    var numberOfDomesticMatchesColor = (colorsMap.size * colorsMap.size) - colorsMap.size;
+    var numberOfDomesticMatchesShape = (shapesMap.size * shapesMap.size) - shapesMap.size;
     // var numberOfDomesticMatchesPattern = (patternFilledInputs * patternFilledInputs) - patternFilledInputs;
     
     // Ta fram hur många gånger en egenskap mött andra egenskaper i samma kategori.
@@ -178,17 +180,17 @@ function calculateSum() {
     // var numberOfForeignMatchesPattern = totalIndividualMatchesPerPattern - numberOfDomesticMatchesPattern;
 
     // Ta fram varje kombination av egenskapers poäng (måste göras till nån sorts array tillslut tror jag)
-    var blueCirclePoints = blueValue + circleValue;
-    var blueTrianglePoints = blueValue + triangleValue;
-    var blueSquarePoints = blueValue + squareValue;
+    var blueCirclePoints = colorsMap.get("blue-points") + shapesMap.get("circle-points");
+    var blueTrianglePoints = colorsMap.get("blue-points") + shapesMap.get("triangle-points");
+    var blueSquarePoints = colorsMap.get("blue-points") + shapesMap.get("square-points");
 
-    var redCirclePoints = redValue + circleValue;
-    var redTrianglePoints = redValue + triangleValue;
-    var redSquarePoints = redValue + squareValue;
+    var redCirclePoints = colorsMap.get("red-points") + shapesMap.get("circle-points");
+    var redTrianglePoints = colorsMap.get("red-points") + shapesMap.get("triangle-points");
+    var redSquarePoints = colorsMap.get("red-points") + shapesMap.get("square-points");
 
-    var greenCirclePoints = greenValue + circleValue;
-    var greenTrianglePoints = greenValue + triangleValue;
-    var greenSquarePoints = greenValue + squareValue;
+    var greenCirclePoints = colorsMap.get("green-points") + shapesMap.get("circle-points");
+    var greenTrianglePoints = colorsMap.get("green-points") + shapesMap.get("triangle-points");
+    var greenSquarePoints = colorsMap.get("green-points") + shapesMap.get("square-points");
 
     var pointsArray = [
         blueCirclePoints, blueTrianglePoints, blueSquarePoints,
@@ -225,17 +227,17 @@ function calculateSum() {
     makeOutput(greenSquareWinRate, "Grn kvdrat: ", resultContainer2)
 
     // Ta fram den genomsnittliga poängen för alla fighters med en bestämd färg
-    var blueAvgValue = (blueCirclePoints + blueTrianglePoints + blueSquarePoints) / colorFilledInputs;
-    var redAvgValue = (redCirclePoints + redTrianglePoints + redSquarePoints) / colorFilledInputs;
-    var greenAvgValue = (greenCirclePoints + greenTrianglePoints + greenSquarePoints) / colorFilledInputs;
+    var blueAvgValue = (blueCirclePoints + blueTrianglePoints + blueSquarePoints) / colorsMap.size;
+    var redAvgValue = (redCirclePoints + redTrianglePoints + redSquarePoints) / colorsMap.size;
+    var greenAvgValue = (greenCirclePoints + greenTrianglePoints + greenSquarePoints) / colorsMap.size;
 
     // Ta fram poängsumman för alla color fighters
     var colorTotalValue = blueAvgValue + redAvgValue + greenAvgValue;
 
     // Ta fram den genomsnittliga poängen för alla fighters med en bestämd form
-    var circleAvgValue = (blueCirclePoints + redCirclePoints + greenCirclePoints) / shapeFilledInputs;
-    var triangleAvgValue = (blueTrianglePoints + redTrianglePoints + greenTrianglePoints) / shapeFilledInputs;
-    var squareAvgValue = (blueSquarePoints + redSquarePoints + greenSquarePoints) / shapeFilledInputs;
+    var circleAvgValue = (blueCirclePoints + redCirclePoints + greenCirclePoints) / shapesMap.size;
+    var triangleAvgValue = (blueTrianglePoints + redTrianglePoints + greenTrianglePoints) / shapesMap.size;
+    var squareAvgValue = (blueSquarePoints + redSquarePoints + greenSquarePoints) / shapesMap.size;
 
     // Ta fram poängsumman för alla shape fighters
     var shapeTotalValue = circleAvgValue + triangleAvgValue + squareAvgValue;
@@ -245,19 +247,19 @@ function calculateSum() {
 
     ///////// FÄRGER //////////
 
-    var finalBlueWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, blueAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorFilledInputs).toFixed(5);
+    var finalBlueWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, blueAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorsMap.size).toFixed(5);
 
-    var finalRedWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, redAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorFilledInputs).toFixed(5);
+    var finalRedWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, redAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorsMap.size).toFixed(5);
 
-    var finalGreenWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, greenAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorFilledInputs).toFixed(5);
+    var finalGreenWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, greenAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorsMap.size).toFixed(5);
 
     //////// FORMER ///////////
 
-    var finalCircleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, circleAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapeFilledInputs).toFixed(5);
+    var finalCircleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, circleAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapesMap.size).toFixed(5);
 
-    var finalTriangleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, triangleAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapeFilledInputs).toFixed(5);
+    var finalTriangleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, triangleAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapesMap.size).toFixed(5);
 
-    var finalSquareWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, squareAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapeFilledInputs).toFixed(5);
+    var finalSquareWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, squareAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapesMap.size).toFixed(5);
 
 
 
@@ -289,25 +291,23 @@ function calculateSum() {
     makeOutput(finalSquareWinRate, "_Kvadrat: ", resultContainer);
 }
 
-// Denna function tar fram, för varje container, antalet ifyllda input-fält
-function countFilledInputs(containerClass) {
+// This function creates, for each container, a map where each key
+// is the name of the id of the input field and the value is the value of that input field
+function createInputMap(containerClass) {
     const containers = document.querySelectorAll('.' + containerClass);
-    const filledCounts = [];
+    const inputsMap = new Map([])
 
     containers.forEach(container => {
         const inputs = container.querySelectorAll('input[type="number"]');
-        let filledInputCount = 0;
 
         inputs.forEach(input => {
             if (input.value.trim() !== '') {
-                filledInputCount++;
+                inputsMap.set(input.id, parseInt(input.value))
             }
         });
-
-        filledCounts.push(filledInputCount);
     });
-
-    return filledCounts;
+    // console.log(inputsMap.size);
+    return inputsMap;
 }
 
 function getWinRate(numberOfDomesticMatches, numberOfForeignMatches, myValue, categoryAvgValue, totalIndividualMatchesPerShape, categoryFilledInputs){
