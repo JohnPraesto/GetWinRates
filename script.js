@@ -141,7 +141,6 @@ function calculateSum() {
     // 2 * 3 = 6
     // 6 * 6 = 36
     // 36 - 6 = 30
-    // Behöver hämta in hur många fält som är ifyllda i varje kategori.
 
     // The size of these maps is number of inputs filled in the each container. It is used for division later on.
     // The key/value-pairs are used as points variables.
@@ -152,34 +151,60 @@ function calculateSum() {
     arrayOfMaps = [colorsMap, shapesMap, patternsMap];
 
     // Ta fram antalet kombinationer av egenskaper
-    let totalFeatures = 1; // Vad gör denna variabel matematiskt?
+    let totalIndividuals = 1; // Vad gör denna variabel matematiskt? // hette tidigare totalFeatures
     arrayOfMaps.forEach(map => {
         if (map.size > 0){
-            totalFeatures *= map.size;
+            totalIndividuals *= map.size;
             }
         }
     )
-    console.log(totalFeatures);
+    console.log(totalIndividuals);
 
     // Ta fram antal individuella möten. (Totalt antal matcher, typ)
-    var totalIndividualMatches = (totalFeatures * totalFeatures) - totalFeatures;
+    let totalIndividualMatches = (totalIndividuals * totalIndividuals) - totalIndividuals;
 
     // Ta fram hur många matcher varje egenskap har gått.
-    var totalIndividualMatchesPerColor = totalIndividualMatches / colorsMap.size;
-    var totalIndividualMatchesPerShape = totalIndividualMatches / shapesMap.size;
-    // var totalIndividualMatchesPerPattern = totalIndividualMatches / patternFilledInputs;
+    let totalIndividualMatchesPerColor = totalIndividualMatches / colorsMap.size;
+    let totalIndividualMatchesPerShape = totalIndividualMatches / shapesMap.size;
+    let totalIndividualMatchesPerPattern = totalIndividualMatches / patternsMap.size;
 
-    // Ta fram hur många gånger varje egenskap mött sin egen egenskap i motståndaren. (Tex Blå cirkel möter Blå kvadrat.)
-    var numberOfDomesticMatchesColor = (colorsMap.size * colorsMap.size) - colorsMap.size;
-    var numberOfDomesticMatchesShape = (shapesMap.size * shapesMap.size) - shapesMap.size;
-    // var numberOfDomesticMatchesPattern = (patternFilledInputs * patternFilledInputs) - patternFilledInputs;
+    // Ta fram hur många gånger varje egenskap mött sig själv i motståndaren. (Tex BLÅ cirkel möter BLÅ kvadrat.)
+    let numberOfDomesticMatchesColor = (colorsMap.size * colorsMap.size) - colorsMap.size;
+    let numberOfDomesticMatchesShape = (shapesMap.size * shapesMap.size) - shapesMap.size;
+    let numberOfDomesticMatchesPattern = (patternsMap.size * patternsMap.size) - patternsMap.size;
     
     // Ta fram hur många gånger en egenskap mött andra egenskaper i samma kategori.
-    var numberOfForeignMatchesColor = totalIndividualMatchesPerColor - numberOfDomesticMatchesColor;
-    var numberOfForeignMatchesShape = totalIndividualMatchesPerShape - numberOfDomesticMatchesShape;
-    // var numberOfForeignMatchesPattern = totalIndividualMatchesPerPattern - numberOfDomesticMatchesPattern;
+    let numberOfForeignMatchesColor = totalIndividualMatchesPerColor - numberOfDomesticMatchesColor;
+    let numberOfForeignMatchesShape = totalIndividualMatchesPerShape - numberOfDomesticMatchesShape;
+    let numberOfForeignMatchesPattern = totalIndividualMatchesPerPattern - numberOfDomesticMatchesPattern;
 
     // Ta fram varje kombination av egenskapers poäng (måste göras till nån sorts array tillslut tror jag)
+
+    arrayOfMaps.sort((a, b) => b.size - a.size);
+
+    // This is a map of each individual. Each key is one individual.
+    // The values are the added up properties that builds up that individual.
+    // For example, one individual constitutes blue circle dotted.
+    // The key name is blue-circle-dotted (kind of)
+    // And the value is blue points plus circle points plus dotted points.
+    const mapOfIndividuals = new Map([])
+    arrayOfMaps[0].forEach((map1value, map1key) => {
+        arrayOfMaps[1].forEach((map2value, map2key) => {
+            arrayOfMaps[2].forEach((map3value, map3key) => {
+                let map1keyName = map1key;
+                let map2keyName = map2key;
+                let map3keyName = map3key;
+                let concatenatedKeyNames = map1keyName.concat(map2keyName, map3keyName);
+
+                let map1valueValue = map1value;
+                let map2valueValue = map2value;
+                let map3valueValue = map3value;
+                let addedValues = map1valueValue + map2valueValue + map3valueValue;
+                mapOfIndividuals.set(concatenatedKeyNames, parseInt(addedValues))
+    })})})
+    // Not scalable to more than 3 maps. It would then need more nested loops.
+    // Improve in future?
+    
     var blueCirclePoints = colorsMap.get("blue-points") + shapesMap.get("circle-points");
     var blueTrianglePoints = colorsMap.get("blue-points") + shapesMap.get("triangle-points");
     var blueSquarePoints = colorsMap.get("blue-points") + shapesMap.get("square-points");
@@ -306,7 +331,6 @@ function createInputMap(containerClass) {
             }
         });
     });
-    // console.log(inputsMap.size);
     return inputsMap;
 }
 
@@ -320,14 +344,14 @@ function getWinRate(numberOfDomesticMatches, numberOfForeignMatches, myValue, ca
 }
 
 function getFighterWinRate(pointsArray, fighterPoints){
-    var sum = 0;
-    var fighterIndex = pointsArray.indexOf(fighterPoints);
+    let sum = 0;
+    let fighterIndex = pointsArray.indexOf(fighterPoints);
     pointsArray.forEach((element, index) => {
         if(index != fighterIndex){
             sum += fighterPoints / (element + fighterPoints);
         };
     });
-    var dividedSum = sum / (pointsArray.length - 1);
+    let dividedSum = sum / (pointsArray.length - 1);
     return dividedSum;
 }
 
