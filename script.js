@@ -187,23 +187,67 @@ function calculateSum() {
     // For example, one individual constitutes blue circle dotted.
     // The key name is blue-circle-dotted (kind of)
     // And the value is blue points plus circle points plus dotted points.
-    const mapOfIndividuals = new Map([])
-    arrayOfMaps[0].forEach((map1value, map1key) => {
-        arrayOfMaps[1].forEach((map2value, map2key) => {
-            arrayOfMaps[2].forEach((map3value, map3key) => {
+    const mapOfIndividualsPoints = new Map([])
+    if (arrayOfMaps[2].size < 1){
+        arrayOfMaps[0].forEach((map1value, map1key) => {
+            arrayOfMaps[1].forEach((map2value, map2key) => {
                 let map1keyName = map1key;
                 let map2keyName = map2key;
-                let map3keyName = map3key;
-                let concatenatedKeyNames = map1keyName.concat(map2keyName, map3keyName);
+                let concatenatedKeyNames = map1keyName.concat(map2keyName);
 
                 let map1valueValue = map1value;
                 let map2valueValue = map2value;
-                let map3valueValue = map3value;
-                let addedValues = map1valueValue + map2valueValue + map3valueValue;
-                mapOfIndividuals.set(concatenatedKeyNames, parseInt(addedValues))
-    })})})
+                let addedValues = map1valueValue + map2valueValue;
+                mapOfIndividualsPoints.set(concatenatedKeyNames, parseInt(addedValues))
+        })})
+    }
+    else if (arrayOfMaps[2].size > 0){
+        arrayOfMaps[0].forEach((map1value, map1key) => {
+            arrayOfMaps[1].forEach((map2value, map2key) => {
+                arrayOfMaps[2].forEach((map3value, map3key) => {
+                    let map1keyName = map1key;
+                    let map2keyName = map2key;
+                    let map3keyName = map3key;
+                    let concatenatedKeyNames = map1keyName.concat(map2keyName, map3keyName);
+    
+                    let map1valueValue = map1value;
+                    let map2valueValue = map2value;
+                    let map3valueValue = map3value;
+                    let addedValues = map1valueValue + map2valueValue + map3valueValue;
+                    mapOfIndividualsPoints.set(concatenatedKeyNames, parseInt(addedValues))
+        })})})
+    }
     // Not scalable to more than 3 maps. It would then need more nested loops.
     // Improve in future?
+
+    console.log("Points Map size:", mapOfIndividualsPoints.size); // Check if we have points
+
+
+    
+
+    // Every individual is to be matched with every other individual.
+    // The individuals win rate agains another individual is
+    // this individuals points divided by this individuals points plus the other individuals points.
+    // When doing this against all other individuals, and dividing by the number of other individuals,
+    // you get the average win rate for this individual.
+    const mapOfIndividualsWinRate = new Map([])
+
+    mapOfIndividualsPoints.forEach((myPoints, myKey) => {
+        let totalWinRate = 0;
+        
+        mapOfIndividualsPoints.forEach((opponentPoints, opponentKey) => {
+            if (myKey !== opponentKey) {
+                const winRate = myPoints / (myPoints + opponentPoints);
+                totalWinRate += winRate;
+            }
+        });
+    
+        const averageWinRate = totalWinRate / (mapOfIndividualsPoints.size - 1);
+        mapOfIndividualsWinRate.set(myKey, averageWinRate);
+    });
+
+    console.log(mapOfIndividualsWinRate);
+    
     
     var blueCirclePoints = colorsMap.get("blue-points") + shapesMap.get("circle-points");
     var blueTrianglePoints = colorsMap.get("blue-points") + shapesMap.get("triangle-points");
@@ -223,17 +267,17 @@ function calculateSum() {
         greenCirclePoints, greenTrianglePoints, greenSquarePoints
     ];
 
-    var blueCircleWinRate = getFighterWinRate(pointsArray, blueCirclePoints).toFixed(5)
-    var blueTriangleWinRate = getFighterWinRate(pointsArray, blueTrianglePoints).toFixed(5)
-    var blueSquareWinRate = getFighterWinRate(pointsArray, blueSquarePoints).toFixed(5)
+    var blueCircleWinRate = getIndividualWinRateOld(pointsArray, blueCirclePoints).toFixed(5)
+    var blueTriangleWinRate = getIndividualWinRateOld(pointsArray, blueTrianglePoints).toFixed(5)
+    var blueSquareWinRate = getIndividualWinRateOld(pointsArray, blueSquarePoints).toFixed(5)
 
-    var redCircleWinRate = getFighterWinRate(pointsArray, redCirclePoints).toFixed(5)
-    var redTriangleWinRate = getFighterWinRate(pointsArray, redTrianglePoints).toFixed(5)
-    var redSquareWinRate = getFighterWinRate(pointsArray, redSquarePoints).toFixed(5)
+    var redCircleWinRate = getIndividualWinRateOld(pointsArray, redCirclePoints).toFixed(5)
+    var redTriangleWinRate = getIndividualWinRateOld(pointsArray, redTrianglePoints).toFixed(5)
+    var redSquareWinRate = getIndividualWinRateOld(pointsArray, redSquarePoints).toFixed(5)
 
-    var greenCircleWinRate = getFighterWinRate(pointsArray, greenCirclePoints).toFixed(5)
-    var greenTriangleWinRate = getFighterWinRate(pointsArray, greenTrianglePoints).toFixed(5)
-    var greenSquareWinRate = getFighterWinRate(pointsArray, greenSquarePoints).toFixed(5)
+    var greenCircleWinRate = getIndividualWinRateOld(pointsArray, greenCirclePoints).toFixed(5)
+    var greenTriangleWinRate = getIndividualWinRateOld(pointsArray, greenTrianglePoints).toFixed(5)
+    var greenSquareWinRate = getIndividualWinRateOld(pointsArray, greenSquarePoints).toFixed(5)
 
     // Create new output elements for valid results
     var resultContainer2 = document.querySelector('.result-container2');
@@ -343,12 +387,12 @@ function getWinRate(numberOfDomesticMatches, numberOfForeignMatches, myValue, ca
     return finalWinRate;
 }
 
-function getFighterWinRate(pointsArray, fighterPoints){
+function getIndividualWinRateOld(pointsArray, individualPoints){
     let sum = 0;
-    let fighterIndex = pointsArray.indexOf(fighterPoints);
+    let individualIndex = pointsArray.indexOf(individualPoints);
     pointsArray.forEach((element, index) => {
-        if(index != fighterIndex){
-            sum += fighterPoints / (element + fighterPoints);
+        if(index != individualIndex){
+            sum += individualPoints / (element + individualPoints);
         };
     });
     let dividedSum = sum / (pointsArray.length - 1);
