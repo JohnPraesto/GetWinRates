@@ -240,17 +240,17 @@ function calculateSum() {
         mapOfIndividualsWinRate.set(myKey, averageWinRate);
     });
     
-    var blueCirclePoints = colorsMap.get("Blue") + shapesMap.get("Circle");
-    var blueTrianglePoints = colorsMap.get("Blue") + shapesMap.get("Triangle");
-    var blueSquarePoints = colorsMap.get("Blue") + shapesMap.get("Square");
+    // var blueCirclePoints = colorsMap.get("Blue") + shapesMap.get("Circle");
+    // var blueTrianglePoints = colorsMap.get("Blue") + shapesMap.get("Triangle");
+    // var blueSquarePoints = colorsMap.get("Blue") + shapesMap.get("Square");
 
-    var redCirclePoints = colorsMap.get("Red") + shapesMap.get("Circle");
-    var redTrianglePoints = colorsMap.get("Red") + shapesMap.get("Triangle");
-    var redSquarePoints = colorsMap.get("Red") + shapesMap.get("Square");
+    // var redCirclePoints = colorsMap.get("Red") + shapesMap.get("Circle");
+    // var redTrianglePoints = colorsMap.get("Red") + shapesMap.get("Triangle");
+    // var redSquarePoints = colorsMap.get("Red") + shapesMap.get("Square");
 
-    var greenCirclePoints = colorsMap.get("Green") + shapesMap.get("Circle");
-    var greenTrianglePoints = colorsMap.get("Green") + shapesMap.get("Triangle");
-    var greenSquarePoints = colorsMap.get("Green") + shapesMap.get("Square");
+    // var greenCirclePoints = colorsMap.get("Green") + shapesMap.get("Circle");
+    // var greenTrianglePoints = colorsMap.get("Green") + shapesMap.get("Triangle");
+    // var greenSquarePoints = colorsMap.get("Green") + shapesMap.get("Square");
 
     // var pointsArray = [
     //     blueCirclePoints, blueTrianglePoints, blueSquarePoints,
@@ -290,18 +290,21 @@ function calculateSum() {
         makeOutput(value, key, individualsContainer)
     })
 
+    // Använd de maps som finns i arrayOfMaps.
+    // Typ for each key som finns i varje map (tex colorsMap), ta alla poäng från keys i mapOfIndividualsPoints
+    // som delar namn med aktuell key. Sen dela med size för aktulle map.
     // Ta fram den genomsnittliga poängen för alla fighters med en bestämd färg
-    var blueAvgValue = (blueCirclePoints + blueTrianglePoints + blueSquarePoints) / colorsMap.size;
-    var redAvgValue = (redCirclePoints + redTrianglePoints + redSquarePoints) / colorsMap.size;
-    var greenAvgValue = (greenCirclePoints + greenTrianglePoints + greenSquarePoints) / colorsMap.size;
+    let blueAvgValue = getAvgValue(mapOfIndividualsPoints, "Blue", colorsMap.size);
+    var redAvgValue = getAvgValue(mapOfIndividualsPoints, "Red", colorsMap.size);
+    var greenAvgValue = getAvgValue(mapOfIndividualsPoints, "Green", colorsMap.size);
 
     // Ta fram poängsumman för alla color fighters
     var colorTotalValue = blueAvgValue + redAvgValue + greenAvgValue;
 
     // Ta fram den genomsnittliga poängen för alla fighters med en bestämd form
-    var circleAvgValue = (blueCirclePoints + redCirclePoints + greenCirclePoints) / shapesMap.size;
-    var triangleAvgValue = (blueTrianglePoints + redTrianglePoints + greenTrianglePoints) / shapesMap.size;
-    var squareAvgValue = (blueSquarePoints + redSquarePoints + greenSquarePoints) / shapesMap.size;
+    var circleAvgValue = getAvgValue(mapOfIndividualsPoints, "Circle", shapesMap.size);
+    var triangleAvgValue = getAvgValue(mapOfIndividualsPoints, "Triangle", shapesMap.size);
+    var squareAvgValue = getAvgValue(mapOfIndividualsPoints, "Square", shapesMap.size);
 
     // Ta fram poängsumman för alla shape fighters
     var shapeTotalValue = circleAvgValue + triangleAvgValue + squareAvgValue;
@@ -371,6 +374,16 @@ function createInputMap(containerClass) {
         });
     });
     return inputsMap;
+}
+
+function getAvgValue(mapOfIndividualsPoints, id, size){
+    let avgValue = 0;
+    mapOfIndividualsPoints.forEach((value, key) => {
+        if (key.includes(id)){
+            avgValue += value;
+        }
+    })
+    return avgValue / size;
 }
 
 function getWinRate(numberOfDomesticMatches, numberOfForeignMatches, myValue, categoryAvgValue, totalIndividualMatchesPerShape, categoryFilledInputs){
