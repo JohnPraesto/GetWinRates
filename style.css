@@ -111,7 +111,7 @@ input{
     font-size: 50px;
 }
 
-.result-container{
+.properties-container{
     background-color: rgb(231, 224, 231);
     width: 41%;
     height: 97.7vh;
@@ -154,7 +154,7 @@ input{
     color: grey;
 }
 
-.result-container2{
+.individuals-container{
     background-color: rgb(231, 224, 231);
     width: 41.5%;
     height: 97.7vh;
