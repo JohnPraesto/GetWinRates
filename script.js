@@ -3,8 +3,8 @@ function orderNumbers() { // Borde gå att make DRY
     // FIGHTERS
 
     // Create new output elements for valid results
-    var resultContainer2 = document.querySelector('.result-container2');
-    var outputs = resultContainer2.getElementsByTagName('output');
+    var individualsContainer = document.querySelector('.individuals-container');
+    var outputs = individualsContainer.getElementsByTagName('output');
     var numbers = [];
 
     // Collect the numbers from the outputs
@@ -20,11 +20,11 @@ function orderNumbers() { // Borde gå att make DRY
     });
 
     // Clear previous results
-    resultContainer2.innerHTML = '';
+    individualsContainer.innerHTML = '';
 
     // Append sorted outputs
     for (var i = 0; i < numbers.length; i++) {
-        makeOutput(numbers[i].value, numbers[i].model, resultContainer2);
+        makeOutput(numbers[i].value, numbers[i].model, individualsContainer);
     }
 
     // COLOR //
@@ -117,12 +117,12 @@ function generateNumbers() {
     var randomSquareNumber = Math.floor(Math.random() * 1001);
 
     // Fill the input fields with the generated numbers
-    document.getElementById('blue-points').value = randomBlueNumber;
-    document.getElementById('red-points').value = randomRedNumber;
-    document.getElementById('green-points').value = randomGreenNumber;
-    document.getElementById('circle-points').value = randomCircleNumber;
-    document.getElementById('triangle-points').value = randomTriangleNumber;
-    document.getElementById('square-points').value = randomSquareNumber;
+    document.getElementById('Blue').value = randomBlueNumber;
+    document.getElementById('Red').value = randomRedNumber;
+    document.getElementById('Green').value = randomGreenNumber;
+    document.getElementById('Circle').value = randomCircleNumber;
+    document.getElementById('Triangle').value = randomTriangleNumber;
+    document.getElementById('Square').value = randomSquareNumber;
 
     // Lägger de slumpade numrena i en array
     const colorsArray = [randomBlueNumber, randomRedNumber, randomGreenNumber];
@@ -219,11 +219,7 @@ function calculateSum() {
     }
     // Not scalable to more than 3 maps. It would then need more nested loops.
     // Improve in future?
-
-    console.log("Points Map size:", mapOfIndividualsPoints.size); // Check if we have points
-
-
-    
+    // console.log("Points Map size:", mapOfIndividualsPoints.size); // Check if we have points
 
     // Every individual is to be matched with every other individual.
     // The individuals win rate agains another individual is
@@ -234,66 +230,65 @@ function calculateSum() {
 
     mapOfIndividualsPoints.forEach((myPoints, myKey) => {
         let totalWinRate = 0;
-        
         mapOfIndividualsPoints.forEach((opponentPoints, opponentKey) => {
             if (myKey !== opponentKey) {
                 const winRate = myPoints / (myPoints + opponentPoints);
                 totalWinRate += winRate;
             }
         });
-    
         const averageWinRate = totalWinRate / (mapOfIndividualsPoints.size - 1);
         mapOfIndividualsWinRate.set(myKey, averageWinRate);
     });
-
-    console.log(mapOfIndividualsWinRate);
     
-    
-    var blueCirclePoints = colorsMap.get("blue-points") + shapesMap.get("circle-points");
-    var blueTrianglePoints = colorsMap.get("blue-points") + shapesMap.get("triangle-points");
-    var blueSquarePoints = colorsMap.get("blue-points") + shapesMap.get("square-points");
+    var blueCirclePoints = colorsMap.get("Blue") + shapesMap.get("Circle");
+    var blueTrianglePoints = colorsMap.get("Blue") + shapesMap.get("Triangle");
+    var blueSquarePoints = colorsMap.get("Blue") + shapesMap.get("Square");
 
-    var redCirclePoints = colorsMap.get("red-points") + shapesMap.get("circle-points");
-    var redTrianglePoints = colorsMap.get("red-points") + shapesMap.get("triangle-points");
-    var redSquarePoints = colorsMap.get("red-points") + shapesMap.get("square-points");
+    var redCirclePoints = colorsMap.get("Red") + shapesMap.get("Circle");
+    var redTrianglePoints = colorsMap.get("Red") + shapesMap.get("Triangle");
+    var redSquarePoints = colorsMap.get("Red") + shapesMap.get("Square");
 
-    var greenCirclePoints = colorsMap.get("green-points") + shapesMap.get("circle-points");
-    var greenTrianglePoints = colorsMap.get("green-points") + shapesMap.get("triangle-points");
-    var greenSquarePoints = colorsMap.get("green-points") + shapesMap.get("square-points");
+    var greenCirclePoints = colorsMap.get("Green") + shapesMap.get("Circle");
+    var greenTrianglePoints = colorsMap.get("Green") + shapesMap.get("Triangle");
+    var greenSquarePoints = colorsMap.get("Green") + shapesMap.get("Square");
 
-    var pointsArray = [
-        blueCirclePoints, blueTrianglePoints, blueSquarePoints,
-        redCirclePoints, redTrianglePoints, redSquarePoints,
-        greenCirclePoints, greenTrianglePoints, greenSquarePoints
-    ];
+    // var pointsArray = [
+    //     blueCirclePoints, blueTrianglePoints, blueSquarePoints,
+    //     redCirclePoints, redTrianglePoints, redSquarePoints,
+    //     greenCirclePoints, greenTrianglePoints, greenSquarePoints
+    // ];
 
-    var blueCircleWinRate = getIndividualWinRateOld(pointsArray, blueCirclePoints).toFixed(5)
-    var blueTriangleWinRate = getIndividualWinRateOld(pointsArray, blueTrianglePoints).toFixed(5)
-    var blueSquareWinRate = getIndividualWinRateOld(pointsArray, blueSquarePoints).toFixed(5)
+    // var blueCircleWinRate = getIndividualWinRateOld(pointsArray, blueCirclePoints).toFixed(5)
+    // var blueTriangleWinRate = getIndividualWinRateOld(pointsArray, blueTrianglePoints).toFixed(5)
+    // var blueSquareWinRate = getIndividualWinRateOld(pointsArray, blueSquarePoints).toFixed(5)
 
-    var redCircleWinRate = getIndividualWinRateOld(pointsArray, redCirclePoints).toFixed(5)
-    var redTriangleWinRate = getIndividualWinRateOld(pointsArray, redTrianglePoints).toFixed(5)
-    var redSquareWinRate = getIndividualWinRateOld(pointsArray, redSquarePoints).toFixed(5)
+    // var redCircleWinRate = getIndividualWinRateOld(pointsArray, redCirclePoints).toFixed(5)
+    // var redTriangleWinRate = getIndividualWinRateOld(pointsArray, redTrianglePoints).toFixed(5)
+    // var redSquareWinRate = getIndividualWinRateOld(pointsArray, redSquarePoints).toFixed(5)
 
-    var greenCircleWinRate = getIndividualWinRateOld(pointsArray, greenCirclePoints).toFixed(5)
-    var greenTriangleWinRate = getIndividualWinRateOld(pointsArray, greenTrianglePoints).toFixed(5)
-    var greenSquareWinRate = getIndividualWinRateOld(pointsArray, greenSquarePoints).toFixed(5)
+    // var greenCircleWinRate = getIndividualWinRateOld(pointsArray, greenCirclePoints).toFixed(5)
+    // var greenTriangleWinRate = getIndividualWinRateOld(pointsArray, greenTrianglePoints).toFixed(5)
+    // var greenSquareWinRate = getIndividualWinRateOld(pointsArray, greenSquarePoints).toFixed(5)
 
     // Create new output elements for valid results
-    var resultContainer2 = document.querySelector('.result-container2');
+    var individualsContainer = document.querySelector('.individuals-container');
 
     // Clear previous results
-    resultContainer2.innerHTML = '';
+    individualsContainer.innerHTML = '';
 
-    makeOutput(blueCircleWinRate, "Blå cirkel: ", resultContainer2)
-    makeOutput(blueTriangleWinRate, "Blå tringl: ", resultContainer2)
-    makeOutput(blueSquareWinRate, "Blå kvdrat: ", resultContainer2)
-    makeOutput(redCircleWinRate, "Röd cirkel: ", resultContainer2)
-    makeOutput(redTriangleWinRate, "Röd tringl: ", resultContainer2)
-    makeOutput(redSquareWinRate, "Röd kvdrat: ", resultContainer2)
-    makeOutput(greenCircleWinRate, "Grn cirkel: ", resultContainer2)
-    makeOutput(greenTriangleWinRate, "Grn tringl: ", resultContainer2)
-    makeOutput(greenSquareWinRate, "Grn kvdrat: ", resultContainer2)
+    // makeOutput(blueCircleWinRate, "Blå cirkel: ", individualsContainer)
+    // makeOutput(blueTriangleWinRate, "Blå tringl: ", individualsContainer)
+    // makeOutput(blueSquareWinRate, "Blå kvdrat: ", individualsContainer)
+    // makeOutput(redCircleWinRate, "Röd cirkel: ", individualsContainer)
+    // makeOutput(redTriangleWinRate, "Röd tringl: ", individualsContainer)
+    // makeOutput(redSquareWinRate, "Röd kvdrat: ", individualsContainer)
+    // makeOutput(greenCircleWinRate, "Grn cirkel: ", individualsContainer)
+    // makeOutput(greenTriangleWinRate, "Grn tringl: ", individualsContainer)
+    // makeOutput(greenSquareWinRate, "Grn kvdrat: ", individualsContainer)
+
+    mapOfIndividualsWinRate.forEach((value, key) => {
+        makeOutput(value, key, individualsContainer)
+    })
 
     // Ta fram den genomsnittliga poängen för alla fighters med en bestämd färg
     var blueAvgValue = (blueCirclePoints + blueTrianglePoints + blueSquarePoints) / colorsMap.size;
@@ -316,19 +311,19 @@ function calculateSum() {
 
     ///////// FÄRGER //////////
 
-    var finalBlueWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, blueAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorsMap.size).toFixed(5);
+    var finalBlueWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, blueAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorsMap.size);
 
-    var finalRedWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, redAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorsMap.size).toFixed(5);
+    var finalRedWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, redAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorsMap.size);
 
-    var finalGreenWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, greenAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorsMap.size).toFixed(5);
+    var finalGreenWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, greenAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorsMap.size);
 
     //////// FORMER ///////////
 
-    var finalCircleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, circleAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapesMap.size).toFixed(5);
+    var finalCircleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, circleAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapesMap.size);
 
-    var finalTriangleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, triangleAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapesMap.size).toFixed(5);
+    var finalTriangleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, triangleAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapesMap.size);
 
-    var finalSquareWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, squareAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapesMap.size).toFixed(5);
+    var finalSquareWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, squareAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapesMap.size);
 
 
 
@@ -383,7 +378,6 @@ function getWinRate(numberOfDomesticMatches, numberOfForeignMatches, myValue, ca
     var totalWinSumSquareDomesticMatches = numberOfDomesticMatches * 0.5;
     var totalWinSumSquareForeignMatches = numberOfForeignMatches * (myValue/(myValue + (categoryAvgValue-myValue)/(categoryFilledInputs-1)));
     var finalWinRate = (totalWinSumSquareDomesticMatches + totalWinSumSquareForeignMatches) / totalIndividualMatchesPerShape;
-
     return finalWinRate;
 }
 
@@ -400,9 +394,10 @@ function getIndividualWinRateOld(pointsArray, individualPoints){
 }
 
 function makeOutput(numbers, model, resultContainer){
-    if (!isNaN(numbers)) {
+    const numbersForOutput = numbers.toFixed(5)
+    if (!isNaN(numbersForOutput)) {
         var output = document.createElement('output');
-        output.textContent = model + numbers;
+        output.textContent = model + numbersForOutput;
         resultContainer.appendChild(output);
     }
 }
