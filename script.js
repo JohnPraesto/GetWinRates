@@ -231,41 +231,39 @@ function calculateSum() {
             let propertyAvgPoints = points / map.size;
             mapOfPropertyAvgPoints.set(property, propertyAvgPoints);
         })
-    })
+    });
+
+    let sumOfAllProperties = 0;
+    arrayOfMaps.forEach((map) => {
+        map.forEach((value,key) => {
+            sumOfAllProperties += value;
+        })
+    });
 
     let blueAvgValue = getAvgValue(mapOfIndividualsPoints, "Blue", colorsMap.size);
     var redAvgValue = getAvgValue(mapOfIndividualsPoints, "Red", colorsMap.size);
     var greenAvgValue = getAvgValue(mapOfIndividualsPoints, "Green", colorsMap.size);
-
-    // Ta fram poängsumman för alla color fighters
-    var colorTotalValue = blueAvgValue + redAvgValue + greenAvgValue;
 
     // Ta fram den genomsnittliga poängen för alla fighters med en bestämd form
     var circleAvgValue = getAvgValue(mapOfIndividualsPoints, "Circle", shapesMap.size);
     var triangleAvgValue = getAvgValue(mapOfIndividualsPoints, "Triangle", shapesMap.size);
     var squareAvgValue = getAvgValue(mapOfIndividualsPoints, "Square", shapesMap.size);
 
-    // Ta fram poängsumman för alla shape fighters
-    var shapeTotalValue = circleAvgValue + triangleAvgValue + squareAvgValue;
-
-    // console.log(colorTotalValue); // de är samma ju.
-    // console.log(shapeTotalValue);
-
     ///////// FÄRGER //////////
 
-    var finalBlueWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, blueAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorsMap.size);
+    var finalBlueWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, blueAvgValue, sumOfAllProperties, totalIndividualMatchesPerColor, colorsMap.size);
 
-    var finalRedWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, redAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorsMap.size);
+    var finalRedWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, redAvgValue, sumOfAllProperties, totalIndividualMatchesPerColor, colorsMap.size);
 
-    var finalGreenWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, greenAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorsMap.size);
+    var finalGreenWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, greenAvgValue, sumOfAllProperties, totalIndividualMatchesPerColor, colorsMap.size);
 
     //////// FORMER ///////////
 
-    var finalCircleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, circleAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapesMap.size);
+    var finalCircleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, circleAvgValue, sumOfAllProperties, totalIndividualMatchesPerShape, shapesMap.size);
 
-    var finalTriangleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, triangleAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapesMap.size);
+    var finalTriangleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, triangleAvgValue, sumOfAllProperties, totalIndividualMatchesPerShape, shapesMap.size);
 
-    var finalSquareWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, squareAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapesMap.size);
+    var finalSquareWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, squareAvgValue, sumOfAllProperties, totalIndividualMatchesPerShape, shapesMap.size);
 
 
 
