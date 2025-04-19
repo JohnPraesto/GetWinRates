@@ -211,12 +211,28 @@ function calculateSum() {
         makeOutput(value, key, individualsContainer)
     })
 
-    // Använd de maps som finns i arrayOfMaps.
-    // Typ for each key som finns i varje map (tex colorsMap), ta alla poäng från keys i mapOfIndividualsPoints
+    // For each map som finns i arrayOfMaps.
+    // For each key som finns i varje map (tex colorsMap),
+    // ta alla poäng från keys i mapOfIndividualsPoints
     // som delar namn med aktuell key (.includes), addera ihop alla.
     // Sen dela summan med size för aktulle map.
     // Och den summan läggs som value i en ny map? Där key är namnet på den aktuella keyn från arrayOfMaps.
     // Ta fram den genomsnittliga poängen för alla fighters med en bestämd färg
+    const mapOfPropertyAvgPoints = new Map([]);
+    arrayOfMaps.forEach((map) => {
+        map.forEach((value, key) => {
+            let property = key;
+            let points = 0;
+            mapOfIndividualsPoints.forEach((pointsValue, pointsKey) => {
+                if (pointsKey.includes(property)) {
+                    points += pointsValue;
+                }
+            })
+            let propertyAvgPoints = points / map.size;
+            mapOfPropertyAvgPoints.set(property, propertyAvgPoints);
+        })
+    })
+
     let blueAvgValue = getAvgValue(mapOfIndividualsPoints, "Blue", colorsMap.size);
     var redAvgValue = getAvgValue(mapOfIndividualsPoints, "Red", colorsMap.size);
     var greenAvgValue = getAvgValue(mapOfIndividualsPoints, "Green", colorsMap.size);
