@@ -148,17 +148,21 @@ function calculateSum() {
     const shapesMap = createInputMap('shape-container');
     const patternsMap = createInputMap('pattern-container');
 
-    arrayOfMaps = [colorsMap, shapesMap, patternsMap];
+    arrayOfMaps = [];
+    if (colorsMap.size > 0) arrayOfMaps.push(colorsMap);
+    if (shapesMap.size > 0) arrayOfMaps.push(shapesMap);
+    if (patternsMap.size > 0) arrayOfMaps.push(patternsMap);
+
+    // Ta fram varje kombination av egenskapers (varje individs) poäng
+    // This is a map of each individual. Each key is one individual.
+    // The values are the added up properties that builds up that individual.
+    // For example, one individual constitutes blue circle dotted.
+    // The key name is blue-circle-dotted (kind of)
+    // And the value is blue points plus circle points plus dotted points.
+    const mapOfIndividualsPoints = combineMaps(arrayOfMaps);
 
     // Ta fram antalet kombinationer av egenskaper
-    let totalIndividuals = 1; // Vad gör denna variabel matematiskt? // hette tidigare totalFeatures
-    arrayOfMaps.forEach(map => {
-        if (map.size > 0){
-            totalIndividuals *= map.size;
-            }
-        }
-    )
-    console.log(totalIndividuals);
+    let totalIndividuals = mapOfIndividualsPoints.size; // Vad gör denna variabel matematiskt? // hette tidigare totalFeatures
 
     // Ta fram antal individuella möten. (Totalt antal matcher, typ)
     let totalIndividualMatches = (totalIndividuals * totalIndividuals) - totalIndividuals;
@@ -177,50 +181,7 @@ function calculateSum() {
     let numberOfForeignMatchesColor = totalIndividualMatchesPerColor - numberOfDomesticMatchesColor;
     let numberOfForeignMatchesShape = totalIndividualMatchesPerShape - numberOfDomesticMatchesShape;
     let numberOfForeignMatchesPattern = totalIndividualMatchesPerPattern - numberOfDomesticMatchesPattern;
-
-    // Ta fram varje kombination av egenskapers poäng (måste göras till nån sorts array tillslut tror jag)
-
-    arrayOfMaps.sort((a, b) => b.size - a.size);
-
-    // This is a map of each individual. Each key is one individual.
-    // The values are the added up properties that builds up that individual.
-    // For example, one individual constitutes blue circle dotted.
-    // The key name is blue-circle-dotted (kind of)
-    // And the value is blue points plus circle points plus dotted points.
-    const mapOfIndividualsPoints = new Map([])
-    if (arrayOfMaps[2].size < 1){
-        arrayOfMaps[0].forEach((map1value, map1key) => {
-            arrayOfMaps[1].forEach((map2value, map2key) => {
-                let map1keyName = map1key;
-                let map2keyName = map2key;
-                let concatenatedKeyNames = map1keyName.concat(map2keyName);
-
-                let map1valueValue = map1value;
-                let map2valueValue = map2value;
-                let addedValues = map1valueValue + map2valueValue;
-                mapOfIndividualsPoints.set(concatenatedKeyNames, parseInt(addedValues))
-        })})
-    }
-    else if (arrayOfMaps[2].size > 0){
-        arrayOfMaps[0].forEach((map1value, map1key) => {
-            arrayOfMaps[1].forEach((map2value, map2key) => {
-                arrayOfMaps[2].forEach((map3value, map3key) => {
-                    let map1keyName = map1key;
-                    let map2keyName = map2key;
-                    let map3keyName = map3key;
-                    let concatenatedKeyNames = map1keyName.concat(map2keyName, map3keyName);
     
-                    let map1valueValue = map1value;
-                    let map2valueValue = map2value;
-                    let map3valueValue = map3value;
-                    let addedValues = map1valueValue + map2valueValue + map3valueValue;
-                    mapOfIndividualsPoints.set(concatenatedKeyNames, parseInt(addedValues))
-        })})})
-    }
-    // Not scalable to more than 3 maps. It would then need more nested loops.
-    // Improve in future?
-    // console.log("Points Map size:", mapOfIndividualsPoints.size); // Check if we have points
-
     // Every individual is to be matched with every other individual.
     // The individuals win rate agains another individual is
     // this individuals points divided by this individuals points plus the other individuals points.
@@ -239,36 +200,6 @@ function calculateSum() {
         const averageWinRate = totalWinRate / (mapOfIndividualsPoints.size - 1);
         mapOfIndividualsWinRate.set(myKey, averageWinRate);
     });
-    
-    // var blueCirclePoints = colorsMap.get("Blue") + shapesMap.get("Circle");
-    // var blueTrianglePoints = colorsMap.get("Blue") + shapesMap.get("Triangle");
-    // var blueSquarePoints = colorsMap.get("Blue") + shapesMap.get("Square");
-
-    // var redCirclePoints = colorsMap.get("Red") + shapesMap.get("Circle");
-    // var redTrianglePoints = colorsMap.get("Red") + shapesMap.get("Triangle");
-    // var redSquarePoints = colorsMap.get("Red") + shapesMap.get("Square");
-
-    // var greenCirclePoints = colorsMap.get("Green") + shapesMap.get("Circle");
-    // var greenTrianglePoints = colorsMap.get("Green") + shapesMap.get("Triangle");
-    // var greenSquarePoints = colorsMap.get("Green") + shapesMap.get("Square");
-
-    // var pointsArray = [
-    //     blueCirclePoints, blueTrianglePoints, blueSquarePoints,
-    //     redCirclePoints, redTrianglePoints, redSquarePoints,
-    //     greenCirclePoints, greenTrianglePoints, greenSquarePoints
-    // ];
-
-    // var blueCircleWinRate = getIndividualWinRateOld(pointsArray, blueCirclePoints).toFixed(5)
-    // var blueTriangleWinRate = getIndividualWinRateOld(pointsArray, blueTrianglePoints).toFixed(5)
-    // var blueSquareWinRate = getIndividualWinRateOld(pointsArray, blueSquarePoints).toFixed(5)
-
-    // var redCircleWinRate = getIndividualWinRateOld(pointsArray, redCirclePoints).toFixed(5)
-    // var redTriangleWinRate = getIndividualWinRateOld(pointsArray, redTrianglePoints).toFixed(5)
-    // var redSquareWinRate = getIndividualWinRateOld(pointsArray, redSquarePoints).toFixed(5)
-
-    // var greenCircleWinRate = getIndividualWinRateOld(pointsArray, greenCirclePoints).toFixed(5)
-    // var greenTriangleWinRate = getIndividualWinRateOld(pointsArray, greenTrianglePoints).toFixed(5)
-    // var greenSquareWinRate = getIndividualWinRateOld(pointsArray, greenSquarePoints).toFixed(5)
 
     // Create new output elements for valid results
     var individualsContainer = document.querySelector('.individuals-container');
@@ -276,23 +207,15 @@ function calculateSum() {
     // Clear previous results
     individualsContainer.innerHTML = '';
 
-    // makeOutput(blueCircleWinRate, "Blå cirkel: ", individualsContainer)
-    // makeOutput(blueTriangleWinRate, "Blå tringl: ", individualsContainer)
-    // makeOutput(blueSquareWinRate, "Blå kvdrat: ", individualsContainer)
-    // makeOutput(redCircleWinRate, "Röd cirkel: ", individualsContainer)
-    // makeOutput(redTriangleWinRate, "Röd tringl: ", individualsContainer)
-    // makeOutput(redSquareWinRate, "Röd kvdrat: ", individualsContainer)
-    // makeOutput(greenCircleWinRate, "Grn cirkel: ", individualsContainer)
-    // makeOutput(greenTriangleWinRate, "Grn tringl: ", individualsContainer)
-    // makeOutput(greenSquareWinRate, "Grn kvdrat: ", individualsContainer)
-
     mapOfIndividualsWinRate.forEach((value, key) => {
         makeOutput(value, key, individualsContainer)
     })
 
     // Använd de maps som finns i arrayOfMaps.
     // Typ for each key som finns i varje map (tex colorsMap), ta alla poäng från keys i mapOfIndividualsPoints
-    // som delar namn med aktuell key. Sen dela med size för aktulle map.
+    // som delar namn med aktuell key (.includes), addera ihop alla.
+    // Sen dela summan med size för aktulle map.
+    // Och den summan läggs som value i en ny map? Där key är namnet på den aktuella keyn från arrayOfMaps.
     // Ta fram den genomsnittliga poängen för alla fighters med en bestämd färg
     let blueAvgValue = getAvgValue(mapOfIndividualsPoints, "Blue", colorsMap.size);
     var redAvgValue = getAvgValue(mapOfIndividualsPoints, "Red", colorsMap.size);
@@ -374,6 +297,28 @@ function createInputMap(containerClass) {
         });
     });
     return inputsMap;
+}
+
+function combineMaps(arrayOfMaps) {
+    const result = new Map();
+
+    function recurse(index, currentKey, currentValue) {
+        if (index === arrayOfMaps.length) {
+            result.set(currentKey, currentValue);
+            return;
+        }
+
+        const currentMap = arrayOfMaps[index];
+        for (const [key, value] of currentMap) {
+            recurse(index + 1, currentKey + key, currentValue + value);
+        }
+    }
+
+    if (arrayOfMaps.length > 0) {
+        recurse(0, '', 0);
+    }
+
+    return result;
 }
 
 function getAvgValue(mapOfIndividualsPoints, id, size){
