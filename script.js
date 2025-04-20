@@ -218,7 +218,7 @@ function calculateSum() {
     // Sen dela summan med size för aktulle map.
     // Och den summan läggs som value i en ny map? Där key är namnet på den aktuella keyn från arrayOfMaps.
     // Ta fram den genomsnittliga poängen för alla fighters med en bestämd färg
-    let arrayOfMapsForOutput = [];
+    let arrayOfMapsOfAvgPoints = [];
     arrayOfMaps.forEach((map) => {
         let mapOfAvgPropertyPointsPerContainer = new Map([]);
         map.forEach((value, key) => {
@@ -232,11 +232,8 @@ function calculateSum() {
             let propertyAvgPoints = points / map.size;
             mapOfAvgPropertyPointsPerContainer.set(property, propertyAvgPoints);
         })
-        arrayOfMapsForOutput.push(mapOfAvgPropertyPointsPerContainer);
+        arrayOfMapsOfAvgPoints.push(mapOfAvgPropertyPointsPerContainer);
     });
-
-    console.log(arrayOfMapsForOutput);
-    console.log(arrayOfMaps);
 
     let sumOfAllProperties = 0;
     arrayOfMaps.forEach((map) => {
@@ -254,6 +251,15 @@ function calculateSum() {
     var triangleAvgValue = getAvgValue(mapOfIndividualsPoints, "Triangle", shapesMap.size);
     var squareAvgValue = getAvgValue(mapOfIndividualsPoints, "Square", shapesMap.size);
 
+    const mapOfAvgPropertyWinrates = new Map([]);
+    arrayOfMapsOfAvgPoints.forEach((map) => {
+        map.forEach((value,key) => {
+            let winrate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, value, sumOfAllProperties, totalIndividualMatchesPerColor, map.size);
+            mapOfAvgPropertyWinrates.set(key, winrate);
+        })
+    });
+
+    console.log(mapOfAvgPropertyWinrates);
 
     ///////// FÄRGER //////////
 
@@ -275,30 +281,35 @@ function calculateSum() {
 
 
     // Create new output elements for valid results
-    var resultContainer = document.querySelector('.result-category-color');
+    // var resultContainer = document.querySelector('.result-category-color');
+    var propertyContainer = document.querySelector('.result-property');
 
     // Clear previous results
-    resultContainer.innerHTML = '';
+    propertyContainer.innerHTML = '';
 
-    // Append valid results to the result container
-    makeOutput(finalBlueWinRate, "_____Blå: ", resultContainer);
+    mapOfAvgPropertyWinrates.forEach((value, key) => {
+        makeOutput(value, key, propertyContainer)
+    })
 
-    makeOutput(finalRedWinRate, "_____Röd: ", resultContainer);
+    // // Append valid results to the result container
+    // makeOutput(finalBlueWinRate, "_____Blå: ", resultContainer);
 
-    makeOutput(finalGreenWinRate, "____Grön: ", resultContainer);
+    // makeOutput(finalRedWinRate, "_____Röd: ", resultContainer);
+
+    // makeOutput(finalGreenWinRate, "____Grön: ", resultContainer);
 
 
-    // Create new output elements for valid results
-    var resultContainer = document.querySelector('.result-category-shape');
+    // // Create new output elements for valid results
+    // var resultContainer = document.querySelector('.result-category-shape');
 
-    // Clear previous results
-    resultContainer.innerHTML = '';
+    // // Clear previous results
+    // resultContainer.innerHTML = '';
 
-    makeOutput(finalCircleWinRate, "__Cirkel: ", resultContainer);
+    // makeOutput(finalCircleWinRate, "__Cirkel: ", resultContainer);
 
-    makeOutput(finalTriangleWinRate, "Triangel: ", resultContainer);
+    // makeOutput(finalTriangleWinRate, "Triangel: ", resultContainer);
 
-    makeOutput(finalSquareWinRate, "_Kvadrat: ", resultContainer);
+    // makeOutput(finalSquareWinRate, "_Kvadrat: ", resultContainer);
 }
 
 // This function creates, for each container, a map where each key
@@ -353,9 +364,9 @@ function getAvgValue(mapOfIndividualsPoints, id, size){
 
 function getWinRate(numberOfDomesticMatches, numberOfForeignMatches, myValue, categoryAvgValue, totalIndividualMatchesPerShape, categoryFilledInputs){
 
-    var totalWinSumSquareDomesticMatches = numberOfDomesticMatches * 0.5;
-    var totalWinSumSquareForeignMatches = numberOfForeignMatches * (myValue/(myValue + (categoryAvgValue-myValue)/(categoryFilledInputs-1)));
-    var finalWinRate = (totalWinSumSquareDomesticMatches + totalWinSumSquareForeignMatches) / totalIndividualMatchesPerShape;
+    let totalWinSumSquareDomesticMatches = numberOfDomesticMatches * 0.5;
+    let totalWinSumSquareForeignMatches = numberOfForeignMatches * (myValue/(myValue + (categoryAvgValue-myValue)/(categoryFilledInputs-1)));
+    let finalWinRate = (totalWinSumSquareDomesticMatches + totalWinSumSquareForeignMatches) / totalIndividualMatchesPerShape;
     return finalWinRate;
 }
 
@@ -381,9 +392,6 @@ function makeOutput(numbers, model, resultContainer){
 }
 
 
-
-// blå + röd totalWR blir inte 100%. varför? ok är det ok eller inte?
-
 // ett lättare sätt att ta fram rätt win rate?:
 // ta avg blå spelare poäng och avg röd spelares poäng, plussa, dela blå spelare med röd+blå spelare
 // multiplicera med hur många matcher blå och röd mött varandra = X
@@ -394,11 +402,15 @@ function makeOutput(numbers, model, resultContainer){
 // avg red = 57
 // 77 + 57 = 134
 // 77 / 134 = 0.5746
-// 0.5746 * 9 = 5.17 (men hur ska jag veta hur många gåner en blå spelare mött en röd(/en spelare av en annan färg. Går det att använda avg av alla andra färger här?)?)
-// Och hur räknar man ut hur många gånger blå har mött sig själv. ! SÅ MÅNGA former det finns i kvadrat minus så många former det finns.
-// Så der behövs alltså här typ en siffra för hur många andra fält förutom färg det finns som är ifyllda. That is the number that needs to
-// be squared and then minus it self.
-// Att räkna ut hur många matcher en färg mött andra färger (räknar med endast en färg nu, kan va annorlunda med fler färger) är samma sak förutom minus-delen.
+// 0.5746 * 9 = 5.17 (men hur ska jag veta hur många gåner en blå spelare mött en röd(/en spelare av en annan färg. 
+// Går det att använda avg av alla andra färger här?)?)
+// Och hur räknar man ut hur många gånger blå har mött sig själv. 
+// ! SÅ MÅNGA former det finns i kvadrat minus så många former det finns.
+// Så det behövs alltså här typ en siffra för hur många andra fält förutom färg det finns som är ifyllda. 
+// That is the number that needs to be squared and then minus it self.
+// Att räkna ut hur många matcher en färg mött andra färger 
+// (räknar med endast en färg nu, kan va annorlunda med fler färger) 
+// är samma sak förutom minus-delen.
 // Alltså antalet former i kvadrat bara.
 // 0.5 * 6 = 3
 // 5.17 + 3 = 8.17
@@ -407,7 +419,8 @@ function makeOutput(numbers, model, resultContainer){
 /*
 
 Det totala antalet individuella möten är (antalet egenskaper multiplicerade med varandra) i kvadrat minus samma antal
-alltså har jag 2 färger och 3 former så multiplicerar jag 3 och 2 = 6 (6 är antalet rader i tabellen, antalet kombinationer av egenskaper)
+alltså har jag 2 färger och 3 former så multiplicerar jag 3 och 2 = 6 
+(6 är antalet rader i tabellen, antalet kombinationer av egenskaper)
 Så tar vi 6 i kvadrat = 36 och sen minus 6 = 30. 30 är antalet individuella matchups.
 För att räkna ut hur totalt många möten en egenskap har tar du antalet egenskaper i den kategorin delat på totalt antal matcher.
 Tex om vi vill se hur många matcher en form har gått så tar vi 30 / 3 = 10. En form har haft 10 möten.
