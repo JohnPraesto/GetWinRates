@@ -1,30 +1,36 @@
-colors = ["blue", "red", "green"]
+// colors = ["blue", "red", "green"]
 
-const colorsMap = new Map([])
+// const colorsMap = new Map([])
 
-colors.forEach(color => {colorsMap.set(color, 1)})
+// colors.forEach(color => {colorsMap.set(color, 1)})
 
-console.log(colorsMap.get("blue"))
-console.log(colors[0])
-console.log(typeof colorsMap.get("blue"))
-console.log(colorsMap.size)
+// console.log(colorsMap.get("blue"))
+// console.log(colors[0])
+// console.log(typeof colorsMap.get("blue"))
+// console.log(colorsMap.size)
 
-const mapKeys = Array.from(colorsMap.keys()).join('');
-console.log(mapKeys)
+// const mapKeys = Array.from(colorsMap.keys()).join('');
+// console.log(mapKeys)
 
-colorsMap.forEach((value, key) => {
-  console.log(key)
-})
+// colorsMap.forEach((value, key) => {
+//   console.log(key)
+// })
 
-let blue = "blue"
-let red = "red"
-let green = "green"
+// let blue = "blue"
+// let red = "red"
+// let green = "green"
 
-let blueredgreen = blue.concat(red, green)
-console.log(blueredgreen);
+// let blueredgreen = blue.concat(red, green)
+// console.log(blueredgreen);
 
 // let string = "BlueRedGreen"
 
 // if (string.includes("Blue")) {
 //   console.log("Blue is in the string")
 // }
+
+const karta = new Map([])
+karta.set(1, 2);
+karta.set(2, 4);
+karta.set(4, 8);
+console.log(karta)
