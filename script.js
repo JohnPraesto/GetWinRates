@@ -218,8 +218,9 @@ function calculateSum() {
     // Sen dela summan med size för aktulle map.
     // Och den summan läggs som value i en ny map? Där key är namnet på den aktuella keyn från arrayOfMaps.
     // Ta fram den genomsnittliga poängen för alla fighters med en bestämd färg
-    const mapOfPropertyAvgPoints = new Map([]);
+    let arrayOfMapsForOutput = [];
     arrayOfMaps.forEach((map) => {
+        let mapOfAvgPropertyPointsPerContainer = new Map([]);
         map.forEach((value, key) => {
             let property = key;
             let points = 0;
@@ -229,9 +230,13 @@ function calculateSum() {
                 }
             })
             let propertyAvgPoints = points / map.size;
-            mapOfPropertyAvgPoints.set(property, propertyAvgPoints);
+            mapOfAvgPropertyPointsPerContainer.set(property, propertyAvgPoints);
         })
+        arrayOfMapsForOutput.push(mapOfAvgPropertyPointsPerContainer);
     });
+
+    console.log(arrayOfMapsForOutput);
+    console.log(arrayOfMaps);
 
     let sumOfAllProperties = 0;
     arrayOfMaps.forEach((map) => {
@@ -248,6 +253,7 @@ function calculateSum() {
     var circleAvgValue = getAvgValue(mapOfIndividualsPoints, "Circle", shapesMap.size);
     var triangleAvgValue = getAvgValue(mapOfIndividualsPoints, "Triangle", shapesMap.size);
     var squareAvgValue = getAvgValue(mapOfIndividualsPoints, "Square", shapesMap.size);
+
 
     ///////// FÄRGER //////////
 
