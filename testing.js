@@ -29,8 +29,14 @@
 //   console.log("Blue is in the string")
 // }
 
+
+
+
+
+
 const karta = new Map([])
-karta.set(1, 2);
-karta.set(2, 4);
-karta.set(4, 8);
-console.log(karta)
+karta.set(1, [2, 4]);
+karta.set(2, [4, 8]);
+karta.set(4, [8]);
+karta.get(4).push(16);
+console.log(karta);

@@ -144,9 +144,19 @@ function calculateSum() {
 
     // The size of these maps is number of inputs filled in the each container. It is used for division later on.
     // The key/value-pairs are used as points variables.
+    // Göra så att varje map i arrayOfMaps, deras values är en lista istället för en int.
+    // Key är The name of the Property
+    // Value är en lista med [Propertyns poäng, totalIndividualMatches, numberOfDomesticMatches, numberOfForeignMatches, propertyns avg poäng]
+    // Dessa variabler åker med och tar fram winraten, vilken appendas till listan.
+    // Det blir som ett objekt nästan.
     const colorsMap = createInputMap('color-container');
     const shapesMap = createInputMap('shape-container');
     const patternsMap = createInputMap('pattern-container');
+    // console.log(colorsMap);
+    // // console.log(shapesMap);
+    // // console.log(patternsMap);
+    // colorsMap.get("Blue").push(666);
+    // console.log(colorsMap);
 
     arrayOfMaps = [];
     if (colorsMap.size > 0) arrayOfMaps.push(colorsMap);
@@ -167,20 +177,38 @@ function calculateSum() {
     // Ta fram antal individuella möten. (Totalt antal matcher, typ)
     let totalIndividualMatches = (totalIndividuals * totalIndividuals) - totalIndividuals;
 
-    // Ta fram hur många matcher varje egenskap har gått.
-    let totalIndividualMatchesPerColor = totalIndividualMatches / colorsMap.size;
-    let totalIndividualMatchesPerShape = totalIndividualMatches / shapesMap.size;
-    let totalIndividualMatchesPerPattern = totalIndividualMatches / patternsMap.size;
+    // Value är en lista med [Propertyns poäng, totalIndividualMatches, numberOfDomesticMatches, numberOfForeignMatches, propertyns avg poäng]
+    arrayOfMaps.forEach((map)=> {
+        // Ta fram hur många matcher varje property har gått. (Tex hur ånga gånger har en blå egenskap vart med i en match)
+        let totalIndividualMatchesPerType = totalIndividualMatches / map.size;
+        // Ta fram hur många gånger varje egenskap mött sig själv i motståndaren. (Tex BLÅ cirkel möter BLÅ kvadrat.)
+        let numberOfDomesticMatches = (colorsMap.size * colorsMap.size) - colorsMap.size;
+        // Ta fram hur många gånger en egenskap mött andra egenskaper i samma kategori. (Mött inte sig själv)
+        let numberOfForeignMatches = totalIndividualMatchesPerType - numberOfDomesticMatches;
+        map.forEach((value, key) => {
+            map.get(key).push(totalIndividualMatchesPerType);
+            map.get(key).push(numberOfDomesticMatches);
+            map.get(key).push(numberOfForeignMatches);
+        })
+    })
 
-    // Ta fram hur många gånger varje egenskap mött sig själv i motståndaren. (Tex BLÅ cirkel möter BLÅ kvadrat.)
-    let numberOfDomesticMatchesColor = (colorsMap.size * colorsMap.size) - colorsMap.size;
-    let numberOfDomesticMatchesShape = (shapesMap.size * shapesMap.size) - shapesMap.size;
-    let numberOfDomesticMatchesPattern = (patternsMap.size * patternsMap.size) - patternsMap.size;
+    // console.log(arrayOfMaps);
+    // console.log(arrayOfMaps[0]);
+
+    // // Ta fram hur många matcher varje egenskap har gått.
+    // let totalIndividualMatchesPerColor = totalIndividualMatches / colorsMap.size;
+    // let totalIndividualMatchesPerShape = totalIndividualMatches / shapesMap.size;
+    // let totalIndividualMatchesPerPattern = totalIndividualMatches / patternsMap.size;
+
+    // // Ta fram hur många gånger varje egenskap mött sig själv i motståndaren. (Tex BLÅ cirkel möter BLÅ kvadrat.)
+    // let numberOfDomesticMatchesColor = (colorsMap.size * colorsMap.size) - colorsMap.size;
+    // let numberOfDomesticMatchesShape = (shapesMap.size * shapesMap.size) - shapesMap.size;
+    // let numberOfDomesticMatchesPattern = (patternsMap.size * patternsMap.size) - patternsMap.size;
     
-    // Ta fram hur många gånger en egenskap mött andra egenskaper i samma kategori.
-    let numberOfForeignMatchesColor = totalIndividualMatchesPerColor - numberOfDomesticMatchesColor;
-    let numberOfForeignMatchesShape = totalIndividualMatchesPerShape - numberOfDomesticMatchesShape;
-    let numberOfForeignMatchesPattern = totalIndividualMatchesPerPattern - numberOfDomesticMatchesPattern;
+    // // Ta fram hur många gånger en egenskap mött andra egenskaper i samma kategori.
+    // let numberOfForeignMatchesColor = totalIndividualMatchesPerColor - numberOfDomesticMatchesColor;
+    // let numberOfForeignMatchesShape = totalIndividualMatchesPerShape - numberOfDomesticMatchesShape;
+    // let numberOfForeignMatchesPattern = totalIndividualMatchesPerPattern - numberOfDomesticMatchesPattern;
     
     // Every individual is to be matched with every other individual.
     // The individuals win rate agains another individual is
@@ -188,7 +216,6 @@ function calculateSum() {
     // When doing this against all other individuals, and dividing by the number of other individuals,
     // you get the average win rate for this individual.
     const mapOfIndividualsWinRate = new Map([])
-
     mapOfIndividualsPoints.forEach((myPoints, myKey) => {
         let totalWinRate = 0;
         mapOfIndividualsPoints.forEach((opponentPoints, opponentKey) => {
@@ -218,34 +245,43 @@ function calculateSum() {
     // Sen dela summan med size för aktulle map.
     // Och den summan läggs som value i en ny map? Där key är namnet på den aktuella keyn från arrayOfMaps.
     // Ta fram den genomsnittliga poängen för alla fighters med en bestämd färg
-    let arrayOfMapsOfAvgPoints = [];
+    // let arrayOfMapsOfAvgPoints = [];
+    // arrayOfMaps.forEach((map) => {
+    //     let mapOfAvgPropertyPointsPerContainer = new Map([]);
+    //     map.forEach((value, key) => {
+    //         let property = key;
+    //         let points = 0;
+    //         mapOfIndividualsPoints.forEach((pointsValue, pointsKey) => {
+    //             if (pointsKey.includes(property)) {
+    //                 points += pointsValue;
+    //             }
+    //         })
+    //         let propertyAvgPoints = points / map.size;
+    //         mapOfAvgPropertyPointsPerContainer.set(property, propertyAvgPoints);
+    //     })
+    //     arrayOfMapsOfAvgPoints.push(mapOfAvgPropertyPointsPerContainer);
+    // });
+
+    // Value är en lista med [Propertyns poäng, totalIndividualMatches, numberOfDomesticMatches, numberOfForeignMatches, propertyns avg poäng]
     arrayOfMaps.forEach((map) => {
-        let mapOfAvgPropertyPointsPerContainer = new Map([]);
         map.forEach((value, key) => {
-            let property = key;
             let points = 0;
             mapOfIndividualsPoints.forEach((pointsValue, pointsKey) => {
-                if (pointsKey.includes(property)) {
+                if (pointsKey.includes(key)) {
                     points += pointsValue;
                 }
             })
             let propertyAvgPoints = points / map.size;
-            mapOfAvgPropertyPointsPerContainer.set(property, propertyAvgPoints);
+            map.get(key).push(propertyAvgPoints);
         })
-        arrayOfMapsOfAvgPoints.push(mapOfAvgPropertyPointsPerContainer);
     });
-
-    console.log(arrayOfMapsOfAvgPoints[0]);
-    console.log(arrayOfMapsOfAvgPoints[1]);
 
     let sumOfAllProperties = 0;
     arrayOfMaps.forEach((map) => {
         map.forEach((value,key) => {
-            sumOfAllProperties += value;
+            sumOfAllProperties += value[0];
         })
     });
-
-    console.log("sumOfAllProperties: " + sumOfAllProperties);
 
     let blueAvgValue = getAvgValue(mapOfIndividualsPoints, "Blue", colorsMap.size);
     var redAvgValue = getAvgValue(mapOfIndividualsPoints, "Red", colorsMap.size);
@@ -256,21 +292,25 @@ function calculateSum() {
     var triangleAvgValue = getAvgValue(mapOfIndividualsPoints, "Triangle", shapesMap.size);
     var squareAvgValue = getAvgValue(mapOfIndividualsPoints, "Square", shapesMap.size);
 
-    // Göra så att varje map i arrayOfMaps, deras values är en lista istället för en int.
-    // Key är The name of the Property
-    // Value är en lista med [Propertyns poäng, propertyns avg poäng, numberOfDomesticMatchesType, numberOfForeignMatchesType, totalIndividualMatchesPerType]
-    // Dessa variabler åker med och tar fram winraten, vilken appendas till listan.
-
-    const mapOfAvgPropertyWinrates = new Map([]);
-    arrayOfMapsOfAvgPoints.forEach((map) => {
+    // Value är en lista med [Propertyns poäng, totalIndividualMatches, numberOfDomesticMatches, numberOfForeignMatches, propertyns avg poäng, propertyns winrate]
+    arrayOfMaps.forEach((map) => {
         map.forEach((value,key) => {
-            let winrate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, value, sumOfAllProperties, totalIndividualMatchesPerShape, map.size);
-            mapOfAvgPropertyWinrates.set(key, winrate);
+            let winrate = getWinRate(value[2], value[3], value[4], sumOfAllProperties, value[1], map.size);
+            map.get(key).push(winrate);
         })
     });
 
-    console.log("mapOfAvgPropertyWinrates:");
-    console.log(mapOfAvgPropertyWinrates);
+
+    // const mapOfAvgPropertyWinrates = new Map([]);
+    // arrayOfMapsOfAvgPoints.forEach((map) => {
+    //     map.forEach((value,key) => {
+    //         let winrate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, value, sumOfAllProperties, totalIndividualMatchesPerShape, map.size);
+    //         mapOfAvgPropertyWinrates.set(key, winrate);
+    //     })
+    // });
+
+    // console.log("mapOfAvgPropertyWinrates:");
+    // console.log(mapOfAvgPropertyWinrates);
 
     // ///////// FÄRGER //////////
 
@@ -298,8 +338,13 @@ function calculateSum() {
     // Clear previous results
     propertyContainer.innerHTML = '';
 
-    mapOfAvgPropertyWinrates.forEach((value, key) => {
-        makeOutput(value, key, propertyContainer)
+    // mapOfAvgPropertyWinrates.forEach((value, key) => {
+    //     makeOutput(value, key, propertyContainer)
+    // })
+
+    arrayOfMaps.forEach((map) => {
+        map.forEach((value, key) => {
+            makeOutput(value[5], key, propertyContainer)})
     })
 
     // // Append valid results to the result container
@@ -334,7 +379,7 @@ function createInputMap(containerClass) {
 
         inputs.forEach(input => {
             if (input.value.trim() !== '') {
-                inputsMap.set(input.id, parseInt(input.value))
+                inputsMap.set(input.id, [parseInt(input.value)])
             }
         });
     });
@@ -352,7 +397,7 @@ function combineMaps(arrayOfMaps) {
 
         const currentMap = arrayOfMaps[index];
         for (const [key, value] of currentMap) {
-            recurse(index + 1, currentKey + key, currentValue + value);
+            recurse(index + 1, currentKey + key, currentValue + value[0]);
         }
     }
 
