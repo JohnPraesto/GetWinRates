@@ -177,18 +177,23 @@ function calculateSum() {
     // Ta fram antal individuella möten. (Totalt antal matcher, typ)
     let totalIndividualMatches = (totalIndividuals * totalIndividuals) - totalIndividuals;
 
-    // Value är en lista med [Propertyns poäng, totalIndividualMatches, numberOfDomesticMatches, numberOfForeignMatches, propertyns avg poäng]
+    // Value är en lista med [Propertyns poäng, totalIndividualMatches, numberOfDomesticMatches, numberOfForeignMatches, categoryAvgValue, propertyns avg poäng]
     arrayOfMaps.forEach((map)=> {
         // Ta fram hur många matcher varje property har gått. (Tex hur ånga gånger har en blå egenskap vart med i en match)
-        let totalIndividualMatchesPerType = totalIndividualMatches / map.size;
+        let totalIndividualMatchesPerProperty = totalIndividualMatches / map.size;
         // Ta fram hur många gånger varje egenskap mött sig själv i motståndaren. (Tex BLÅ cirkel möter BLÅ kvadrat.)
         let numberOfDomesticMatches = (colorsMap.size * colorsMap.size) - colorsMap.size;
         // Ta fram hur många gånger en egenskap mött andra egenskaper i samma kategori. (Mött inte sig själv)
-        let numberOfForeignMatches = totalIndividualMatchesPerType - numberOfDomesticMatches;
+        let numberOfForeignMatches = totalIndividualMatchesPerProperty - numberOfDomesticMatches;
+        let categoryTotalValue = 0;
         map.forEach((value, key) => {
-            map.get(key).push(totalIndividualMatchesPerType);
+            categoryTotalValue += value[0];
+        })
+        map.forEach((value, key) => {
+            map.get(key).push(totalIndividualMatchesPerProperty);
             map.get(key).push(numberOfDomesticMatches);
             map.get(key).push(numberOfForeignMatches);
+            map.get(key).push(categoryTotalValue); // /map-size
         })
     })
 
@@ -262,7 +267,7 @@ function calculateSum() {
     //     arrayOfMapsOfAvgPoints.push(mapOfAvgPropertyPointsPerContainer);
     // });
 
-    // Value är en lista med [Propertyns poäng, totalIndividualMatches, numberOfDomesticMatches, numberOfForeignMatches, propertyns avg poäng]
+    // Value är en lista med [Propertyns poäng, totalIndividualMatches, numberOfDomesticMatches, numberOfForeignMatches, categoryAvgValue, propertyns avg poäng]
     arrayOfMaps.forEach((map) => {
         map.forEach((value, key) => {
             let points = 0;
@@ -283,19 +288,45 @@ function calculateSum() {
         })
     });
 
-    let blueAvgValue = getAvgValue(mapOfIndividualsPoints, "Blue", colorsMap.size);
-    var redAvgValue = getAvgValue(mapOfIndividualsPoints, "Red", colorsMap.size);
-    var greenAvgValue = getAvgValue(mapOfIndividualsPoints, "Green", colorsMap.size);
 
-    // Ta fram den genomsnittliga poängen för alla fighters med en bestämd form
-    var circleAvgValue = getAvgValue(mapOfIndividualsPoints, "Circle", shapesMap.size);
-    var triangleAvgValue = getAvgValue(mapOfIndividualsPoints, "Triangle", shapesMap.size);
-    var squareAvgValue = getAvgValue(mapOfIndividualsPoints, "Square", shapesMap.size);
 
-    // Value är en lista med [Propertyns poäng, totalIndividualMatches, numberOfDomesticMatches, numberOfForeignMatches, propertyns avg poäng, propertyns winrate]
+
+
+
+
+
+    
+    // // Ta fram den genomsnittliga poängen för alla fighters med en bestämd färg
+    // var blueAvgValue = (blueCirclePoints + blueTrianglePoints + blueSquarePoints) / colorFilledInputs;
+    // var redAvgValue = (redCirclePoints + redTrianglePoints + redSquarePoints) / colorFilledInputs;
+    // var greenAvgValue = (greenCirclePoints + greenTrianglePoints + greenSquarePoints) / colorFilledInputs;
+
+    // // Ta fram poängsumman för alla color fighters
+    // var colorTotalValue = blueAvgValue + redAvgValue + greenAvgValue;
+
+    // // Ta fram den genomsnittliga poängen för alla fighters med en bestämd form
+    // var circleAvgValue = (blueCirclePoints + redCirclePoints + greenCirclePoints) / shapesMap.size;
+    // var triangleAvgValue = (blueTrianglePoints + redTrianglePoints + greenTrianglePoints) / shapeFilledInputs;
+    // var squareAvgValue = (blueSquarePoints + redSquarePoints + greenSquarePoints) / shapeFilledInputs;
+
+    // // Ta fram poängsumman för alla shape fighters
+    // var shapeTotalValue = circleAvgValue + triangleAvgValue + squareAvgValue;
+
+    // // console.log(colorTotalValue); // de är samma ju.
+    // // console.log(shapeTotalValue);
+
+
+
+
+
+
+
+
+// function getWinRate(numberOfDomesticMatches, numberOfForeignMatches, avgPropertyPoints, categoryAvgValue, totalIndividualMatchesPerShape, categoryFilledInputs)
+// Value är en lista med [Propertyns poäng, totalIndividualMatches, numberOfDomesticMatches, numberOfForeignMatches, categoryAvgValue, avgPropertyPoints, propertyns winrate]
     arrayOfMaps.forEach((map) => {
         map.forEach((value,key) => {
-            let winrate = getWinRate(value[2], value[3], value[4], sumOfAllProperties, value[1], map.size);
+            let winrate = getWinRate(value[2], value[3], value[5], value[4], value[1], map.size);
             map.get(key).push(winrate);
         })
     });
@@ -344,7 +375,7 @@ function calculateSum() {
 
     arrayOfMaps.forEach((map) => {
         map.forEach((value, key) => {
-            makeOutput(value[5], key, propertyContainer)})
+            makeOutput(value[6], key, propertyContainer)})
     })
 
     // // Append valid results to the result container
@@ -418,11 +449,11 @@ function getAvgValue(mapOfIndividualsPoints, id, size){
     return avgValue / size;
 }
 
-function getWinRate(numberOfDomesticMatches, numberOfForeignMatches, avgPropertyPoints, categoryAvgValue, totalIndividualMatchesPerShape, categoryFilledInputs){
+function getWinRate(numberOfDomesticMatches, numberOfForeignMatches, avgPropertyPoints, categoryAvgValue, totalIndividualMatchesPerType, categoryFilledInputs){
 
     let totalWinSumSquareDomesticMatches = numberOfDomesticMatches * 0.5;
     let totalWinSumSquareForeignMatches = numberOfForeignMatches * (avgPropertyPoints/(avgPropertyPoints + (categoryAvgValue-avgPropertyPoints)/(categoryFilledInputs-1)));
-    let finalWinRate = (totalWinSumSquareDomesticMatches + totalWinSumSquareForeignMatches) / totalIndividualMatchesPerShape;
+    let finalWinRate = (totalWinSumSquareDomesticMatches + totalWinSumSquareForeignMatches) / totalIndividualMatchesPerType;
     return finalWinRate;
 }
 
