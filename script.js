@@ -185,15 +185,15 @@ function calculateSum() {
         let numberOfDomesticMatches = (colorsMap.size * colorsMap.size) - colorsMap.size;
         // Ta fram hur många gånger en egenskap mött andra egenskaper i samma kategori. (Mött inte sig själv)
         let numberOfForeignMatches = totalIndividualMatchesPerProperty - numberOfDomesticMatches;
-        let categoryTotalValue = 0;
-        map.forEach((value, key) => {
-            categoryTotalValue += value[0];
-        })
+        // let categoryTotalValue = 0;
+        // map.forEach((value, key) => {
+        //     categoryTotalValue += value[0];
+        // })
         map.forEach((value, key) => {
             map.get(key).push(totalIndividualMatchesPerProperty);
             map.get(key).push(numberOfDomesticMatches);
             map.get(key).push(numberOfForeignMatches);
-            map.get(key).push(categoryTotalValue); // /map-size
+            // map.get(key).push(categoryTotalValue); // /map-size
         })
     })
 
@@ -267,7 +267,7 @@ function calculateSum() {
     //     arrayOfMapsOfAvgPoints.push(mapOfAvgPropertyPointsPerContainer);
     // });
 
-    // Value är en lista med [Propertyns poäng, totalIndividualMatches, numberOfDomesticMatches, numberOfForeignMatches, categoryAvgValue, propertyns avg poäng]
+    // Value är en lista med [Propertyns poäng, totalIndividualMatches, numberOfDomesticMatches, numberOfForeignMatches, propertyns avg poäng, categoryIndividualsTotalValue,]
     arrayOfMaps.forEach((map) => {
         map.forEach((value, key) => {
             let points = 0;
@@ -276,26 +276,23 @@ function calculateSum() {
                     points += pointsValue;
                 }
             })
-            let propertyAvgPoints = points / map.size;
-            map.get(key).push(propertyAvgPoints);
+            let avgPropertyPoints = points / map.size;
+            map.get(key).push(avgPropertyPoints);
         })
     });
 
-    let sumOfAllProperties = 0;
     arrayOfMaps.forEach((map) => {
-        map.forEach((value,key) => {
-            sumOfAllProperties += value[0];
+        let mapsum = 0;
+        map.forEach((value, key) => {
+            mapsum += value[4];
+        })
+        map.forEach((value, key) => {
+            map.get(key).push(mapsum);
         })
     });
 
+    console.log(arrayOfMaps);
 
-
-
-
-
-
-
-    
     // // Ta fram den genomsnittliga poängen för alla fighters med en bestämd färg
     // var blueAvgValue = (blueCirclePoints + blueTrianglePoints + blueSquarePoints) / colorFilledInputs;
     // var redAvgValue = (redCirclePoints + redTrianglePoints + redSquarePoints) / colorFilledInputs;
@@ -318,7 +315,14 @@ function calculateSum() {
 
 
 
+    let sumOfAllProperties = 0;
+    arrayOfMaps.forEach((map) => {
+        map.forEach((value,key) => {
+            sumOfAllProperties += value[0];
+        })
+    });
 
+    console.log("sumOfAllProperties: " + sumOfAllProperties);
 
 
 
