@@ -152,11 +152,6 @@ function calculateSum() {
     const colorsMap = createInputMap('color-container');
     const shapesMap = createInputMap('shape-container');
     const patternsMap = createInputMap('pattern-container');
-    // console.log(colorsMap);
-    // // console.log(shapesMap);
-    // // console.log(patternsMap);
-    // colorsMap.get("Blue").push(666);
-    // console.log(colorsMap);
 
     arrayOfMaps = [];
     if (colorsMap.size > 0) arrayOfMaps.push(colorsMap);
@@ -176,20 +171,15 @@ function calculateSum() {
     let totalIndividuals = mapOfIndividualsPoints.size;
 
     // Ta fram antal individuella möten. (Totalt antal matcher, typ)
-    // STÄMMER EJ HELLER?? vafan? 
-    // let totalMatches = (totalIndividuals * totalIndividuals) - totalIndividuals; // gammal
-    let totalMatches = ((totalIndividuals * totalIndividuals) - totalIndividuals) / 2 // ny
+    let totalMatches = ((totalIndividuals * totalIndividuals) - totalIndividuals) / 2
     console.log("totalIndividualMatches: " + totalMatches);
 
-    // Value är en lista med [Propertyns poäng, totalIndividualMatches, numberOfDomesticMatches, numberOfForeignMatches, categoryAvgValue, propertyns avg poäng]
+    // Value är en lista med [Propertyns poäng, totalPropertyMatches, numberOfDomesticMatches, numberOfForeignMatches, avgPropertyPoints, categoryTotalValue, propertyns winrate]
     arrayOfMaps.forEach((map)=> {
         // Ta fram hur många matcher varje property har gått. (Tex hur ånga gånger har en blå egenskap vart med i en match)
-        // DENNA BEHÖVER OCKSÅ RÄTTAS TILL
-        // let totalPropertyMatches = totalMatches / map.size; // gammal
-        let totalPropertyMatches = (totalMatches*2) / map.size; // ny
+        let totalPropertyMatches = (totalMatches*2) / map.size;
         console.log("totalPropertyMatches: " + totalPropertyMatches);
         // Ta fram hur många gånger varje egenskap mött sig själv i motståndaren. (Tex BLÅ cirkel möter BLÅ kvadrat.)
-        // STÄMMER EJ???? (rätt: ((mapOfIndividualsPoints.size / colorsMap.size) * (mapOfIndividualsPoints.size / colorsMap.size)) - (mapOfIndividualsPoints.size / colorsMap.size))
         let splits = totalIndividuals / map.size;
         let numberOfDomesticMatches = (splits * splits) - splits; 
         // Ta fram hur många gånger en egenskap mött andra egenskaper i samma kategori. (Mött inte sig själv)
@@ -205,24 +195,6 @@ function calculateSum() {
             // map.get(key).push(categoryTotalValue); // /map-size
         })
     })
-
-    // console.log(arrayOfMaps);
-    // console.log(arrayOfMaps[0]);
-
-    // // Ta fram hur många matcher varje egenskap har gått.
-    // let totalIndividualMatchesPerColor = totalIndividualMatches / colorsMap.size;
-    // let totalIndividualMatchesPerShape = totalIndividualMatches / shapesMap.size;
-    // let totalIndividualMatchesPerPattern = totalIndividualMatches / patternsMap.size;
-
-    // // Ta fram hur många gånger varje egenskap mött sig själv i motståndaren. (Tex BLÅ cirkel möter BLÅ kvadrat.)
-    // let numberOfDomesticMatchesColor = (colorsMap.size * colorsMap.size) - colorsMap.size;
-    // let numberOfDomesticMatchesShape = (shapesMap.size * shapesMap.size) - shapesMap.size;
-    // let numberOfDomesticMatchesPattern = (patternsMap.size * patternsMap.size) - patternsMap.size;
-    
-    // // Ta fram hur många gånger en egenskap mött andra egenskaper i samma kategori.
-    // let numberOfForeignMatchesColor = totalIndividualMatchesPerColor - numberOfDomesticMatchesColor;
-    // let numberOfForeignMatchesShape = totalIndividualMatchesPerShape - numberOfDomesticMatchesShape;
-    // let numberOfForeignMatchesPattern = totalIndividualMatchesPerPattern - numberOfDomesticMatchesPattern;
     
     // Every individual is to be matched with every other individual.
     // The individuals win rate agains another individual is
@@ -259,24 +231,7 @@ function calculateSum() {
     // Sen dela summan med size för aktulle map.
     // Och den summan läggs som value i en ny map? Där key är namnet på den aktuella keyn från arrayOfMaps.
     // Ta fram den genomsnittliga poängen för alla fighters med en bestämd färg
-    // let arrayOfMapsOfAvgPoints = [];
-    // arrayOfMaps.forEach((map) => {
-    //     let mapOfAvgPropertyPointsPerContainer = new Map([]);
-    //     map.forEach((value, key) => {
-    //         let property = key;
-    //         let points = 0;
-    //         mapOfIndividualsPoints.forEach((pointsValue, pointsKey) => {
-    //             if (pointsKey.includes(property)) {
-    //                 points += pointsValue;
-    //             }
-    //         })
-    //         let propertyAvgPoints = points / map.size;
-    //         mapOfAvgPropertyPointsPerContainer.set(property, propertyAvgPoints);
-    //     })
-    //     arrayOfMapsOfAvgPoints.push(mapOfAvgPropertyPointsPerContainer);
-    // });
-
-    // Value är en lista med [Propertyns poäng, totalPropertyMatches, numberOfDomesticMatches, numberOfForeignMatches, avgPropertyPoints, colorTotalValue]
+    // Value är en lista med [Propertyns poäng, totalPropertyMatches, numberOfDomesticMatches, numberOfForeignMatches, avgPropertyPoints, categoryTotalValue, propertyns winrate]
     arrayOfMaps.forEach((map) => {
         map.forEach((value, key) => {
             let points = 0;
@@ -302,78 +257,15 @@ function calculateSum() {
 
     console.log(arrayOfMaps);
 
-    // // Ta fram den genomsnittliga poängen för alla fighters med en bestämd färg
-    // var blueAvgValue = (blueCirclePoints + blueTrianglePoints + blueSquarePoints) / colorFilledInputs;
-    // var redAvgValue = (redCirclePoints + redTrianglePoints + redSquarePoints) / colorFilledInputs;
-    // var greenAvgValue = (greenCirclePoints + greenTrianglePoints + greenSquarePoints) / colorFilledInputs;
 
-    // // Ta fram poängsumman för alla color fighters
-    // var colorTotalValue = blueAvgValue + redAvgValue + greenAvgValue;
-
-    // // Ta fram den genomsnittliga poängen för alla fighters med en bestämd form
-    // var circleAvgValue = (blueCirclePoints + redCirclePoints + greenCirclePoints) / shapesMap.size;
-    // var triangleAvgValue = (blueTrianglePoints + redTrianglePoints + greenTrianglePoints) / shapeFilledInputs;
-    // var squareAvgValue = (blueSquarePoints + redSquarePoints + greenSquarePoints) / shapeFilledInputs;
-
-    // // Ta fram poängsumman för alla shape fighters
-    // var shapeTotalValue = circleAvgValue + triangleAvgValue + squareAvgValue;
-
-    // // console.log(colorTotalValue); // de är samma ju.
-    // // console.log(shapeTotalValue);
-
-
-
-
-    // let sumOfAllProperties = 0;
-    // arrayOfMaps.forEach((map) => {
-    //     map.forEach((value,key) => {
-    //         sumOfAllProperties += value[0];
-    //     })
-    // });
-
-    // console.log("sumOfAllProperties: " + sumOfAllProperties);
-
-
-
-// function getWinRate(numberOfDomesticMatches, numberOfForeignMatches, avgPropertyPoints, categoryAvgValue, totalIndividualMatchesPerShape, categoryFilledInputs)
-// Value är en lista med [Propertyns poäng, totalPropertyMatches, numberOfDomesticMatches, numberOfForeignMatches, avgPropertyPoints, colorTotalValue, propertyns winrate]
+// function getWinRate(numberOfDomesticMatches, numberOfForeignMatches, avgPropertyPoints, categoryTotalValue, totalIndividualMatchesPerShape, categoryFilledInputs)
+// Value är en lista med [Propertyns poäng, totalPropertyMatches, numberOfDomesticMatches, numberOfForeignMatches, avgPropertyPoints, categoryTotalValue, propertyns winrate]
     arrayOfMaps.forEach((map) => {
         map.forEach((value,key) => {
             let winrate = getWinRate(value[2], value[3], value[4], value[5], value[1], map.size);
             map.get(key).push(winrate);
         })
     });
-
-
-    // const mapOfAvgPropertyWinrates = new Map([]);
-    // arrayOfMapsOfAvgPoints.forEach((map) => {
-    //     map.forEach((value,key) => {
-    //         let winrate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, value, sumOfAllProperties, totalIndividualMatchesPerShape, map.size);
-    //         mapOfAvgPropertyWinrates.set(key, winrate);
-    //     })
-    // });
-
-    // console.log("mapOfAvgPropertyWinrates:");
-    // console.log(mapOfAvgPropertyWinrates);
-
-    // ///////// FÄRGER //////////
-
-    // var finalBlueWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, blueAvgValue, colorTotalValue, totalIndividualMatchesPerColor, colorsMap.size);
-
-    // var finalRedWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, redAvgValue, sumOfAllProperties, totalIndividualMatchesPerColor, colorsMap.size);
-
-    // var finalGreenWinRate = getWinRate(numberOfDomesticMatchesColor, numberOfForeignMatchesColor, greenAvgValue, sumOfAllProperties, totalIndividualMatchesPerColor, colorsMap.size);
-
-    // //////// FORMER ///////////
-
-    // var finalCircleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, circleAvgValue, shapeTotalValue, totalIndividualMatchesPerShape, shapesMap.size);
-
-    // var finalTriangleWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, triangleAvgValue, sumOfAllProperties, totalIndividualMatchesPerShape, shapesMap.size);
-
-    // var finalSquareWinRate = getWinRate(numberOfDomesticMatchesShape, numberOfForeignMatchesShape, squareAvgValue, sumOfAllProperties, totalIndividualMatchesPerShape, shapesMap.size);
-
-
-
 
     // Create new output elements for valid results
     // var resultContainer = document.querySelector('.result-category-color');
@@ -382,34 +274,10 @@ function calculateSum() {
     // Clear previous results
     propertyContainer.innerHTML = '';
 
-    // mapOfAvgPropertyWinrates.forEach((value, key) => {
-    //     makeOutput(value, key, propertyContainer)
-    // })
-
     arrayOfMaps.forEach((map) => {
         map.forEach((value, key) => {
             makeOutput(value[6], key, propertyContainer)})
     })
-
-    // // Append valid results to the result container
-    // makeOutput(finalBlueWinRate, "_____Blå: ", resultContainer);
-
-    // makeOutput(finalRedWinRate, "_____Röd: ", resultContainer);
-
-    // makeOutput(finalGreenWinRate, "____Grön: ", resultContainer);
-
-
-    // // Create new output elements for valid results
-    // var resultContainer = document.querySelector('.result-category-shape');
-
-    // // Clear previous results
-    // resultContainer.innerHTML = '';
-
-    // makeOutput(finalCircleWinRate, "__Cirkel: ", resultContainer);
-
-    // makeOutput(finalTriangleWinRate, "Triangel: ", resultContainer);
-
-    // makeOutput(finalSquareWinRate, "_Kvadrat: ", resultContainer);
 }
 
 // This function creates, for each container, a map where each key
