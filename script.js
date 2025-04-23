@@ -115,6 +115,9 @@ function generateNumbers() {
     var randomCircleNumber = Math.floor(Math.random() * 1001);
     var randomTriangleNumber = Math.floor(Math.random() * 1001);
     var randomSquareNumber = Math.floor(Math.random() * 1001);
+    var randomChequeredNumber = Math.floor(Math.random() * 1001);
+    var randomStripedNumber = Math.floor(Math.random() * 1001);
+    var randomDottedNumber = Math.floor(Math.random() * 1001);
 
     // Fill the input fields with the generated numbers
     document.getElementById('Blue').value = randomBlueNumber;
@@ -123,15 +126,21 @@ function generateNumbers() {
     document.getElementById('Circle').value = randomCircleNumber;
     document.getElementById('Triangle').value = randomTriangleNumber;
     document.getElementById('Square').value = randomSquareNumber;
+    document.getElementById('Chequered').value = randomChequeredNumber;
+    document.getElementById('Striped').value = randomStripedNumber;
+    document.getElementById('Dotted').value = randomDottedNumber;
 
     // Lägger de slumpade numrena i en array
     const colorsArray = [randomBlueNumber, randomRedNumber, randomGreenNumber];
     const shapeArray = [randomCircleNumber, randomTriangleNumber, randomSquareNumber];
-
+    const patternsArray = [randomChequeredNumber, randomStripedNumber, randomDottedNumber];
+    // Dessa sa la synas i textboxen när man trycker kör
     document.getElementById('color-average-box').value = ((randomBlueNumber + randomRedNumber + randomGreenNumber) / 3).toFixed(0);
     document.getElementById('shape-average-box').value = ((randomCircleNumber + randomTriangleNumber + randomSquareNumber) / 3).toFixed(0);
+    document.getElementById('pattern-average-box').value = ((randomChequeredNumber + randomStripedNumber + randomDottedNumber) / 3).toFixed(0);
     document.getElementById('color-wide-box').value = Math.max(...colorsArray)-Math.min(...colorsArray);
     document.getElementById('shape-wide-box').value = Math.max(...shapeArray)-Math.min(...shapeArray);
+    document.getElementById('pattern-wide-box').value = Math.max(...patternsArray)-Math.min(...patternsArray);
 }
 
 function calculateSum() {
