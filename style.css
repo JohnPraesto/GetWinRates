@@ -78,7 +78,7 @@ input{
     color: rgba(0, 0, 0, 0.5);
 }
 
-#color-average-box, #color-wide-box, #shape-average-box, #shape-wide-box{
+#color-average-box, #color-wide-box, #shape-average-box, #shape-wide-box, #pattern-average-box, #pattern-wide-box{
     color:grey;
     background-color: rgba(255, 255, 255, 0.5);
     border: none;
