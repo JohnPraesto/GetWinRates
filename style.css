@@ -1,13 +1,25 @@
 body{
     margin: 0;
     display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
 .points-container{
     display: flex;
     background-color: rgb(220, 219, 235);
     height: 100vh;
-    width: 15vw;
+    width: clamp(250px, 15vw, 400px);  /* Min 250px, preferred 15vw, max 400px */
+    @media (max-width: 768px) {
+        width: 95%;
+        height: auto;
+        min-height: 600px;
+        margin: 10px;
+    }
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -111,44 +123,7 @@ input{
     font-size: 50px;
 }
 
-.properties-container{
-    background-color: rgb(231, 224, 231);
-    width: 41%;
-    height: 97.7vh;
-    border: 1px solid;  
-    border-radius: 10px;
-    margin-top: 10px;
-    margin-left: 10px;
-    display: flex;
-    align-items: center; /* eller flex-end */
-    justify-content: center;
-    flex-direction: column;
-    font-family: 'Consolas', 'Courier New', Courier, monospace;
-}
-
-
-.result-property{
-    /* background-color: rgb(228, 161, 74); */
-    margin: 5px;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: end;
-    flex-direction: column;
-}
-
-
-.procent-wide-container{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 40px;
-    color: grey;
-}
-
-.individuals-container{
+.properties-container, .individuals-container{
     background-color: rgb(231, 224, 231);
     width: 41.5%;
     height: 97.7vh;
@@ -161,6 +136,55 @@ input{
     justify-content: center;
     flex-direction: column;
     font-family: 'Consolas', 'Courier New', Courier, monospace;
+    overflow-y: auto;
+    @media (max-width: 768px) {
+        width: 95%;
+        height: auto;
+        min-height: 300px;
+        margin: 10px;
+    }   
+}
+
+.individuals-container{
+    justify-content: flex-start;
+}
+
+.property-results-grid {
+    display: grid;
+    grid-template-columns: minmax(100px, auto) minmax(80px, auto);
+    gap: clamp(10px, 2vw, 20px);
+    width: 100%;
+    max-width: clamp(200px, 50vw, 400px);
+    margin: 0 auto;
+    font-size: clamp(30px, 2vw, 60px);
+}
+
+.property-key {
+    text-align: left;
+}
+
+.property-value {
+    text-align: left;
+}
+
+.individual-results-grid {
+    display: grid;
+    grid-template-columns: minmax(100px, auto) minmax(80px, auto);
+    gap: clamp(10px, 2vw, 20px);
+    width: 100%;
+    max-width: clamp(1000px, 50vw, 1000px);
+    margin: 0 auto;
+    font-size: clamp(30px, 2vw, 60px);
+}
+
+.procent-wide-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: grey;
 }
 
 output{
