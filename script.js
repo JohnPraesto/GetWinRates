@@ -135,6 +135,7 @@ function generateNumbers() {
     const shapeArray = [randomCircleNumber, randomTriangleNumber, randomSquareNumber];
     const patternsArray = [randomChequeredNumber, randomStripedNumber, randomDottedNumber];
     // Dessa sa la synas i textboxen när man trycker kör
+    // kan det vara att bara flytta dessa till calculateSum()?
     document.getElementById('color-average-box').value = ((randomBlueNumber + randomRedNumber + randomGreenNumber) / 3).toFixed(0);
     document.getElementById('shape-average-box').value = ((randomCircleNumber + randomTriangleNumber + randomSquareNumber) / 3).toFixed(0);
     document.getElementById('pattern-average-box').value = ((randomChequeredNumber + randomStripedNumber + randomDottedNumber) / 3).toFixed(0);
@@ -224,10 +225,12 @@ function calculateSum() {
     });
 
     // Create new output elements for valid results
-    var individualsContainer = document.querySelector('.individuals-container');
+    // var individualsContainer = document.querySelector('.individuals-container');
+    var individualsContainer = document.querySelector('.individual-results-grid');
 
     // Clear previous results
     individualsContainer.innerHTML = '';
+    individualsContainer.scrollTop = 0;
 
     mapOfIndividualsWinRate.forEach((value, key) => {
         makeOutput(value, key, individualsContainer)
@@ -277,8 +280,8 @@ function calculateSum() {
     });
 
     // Create new output elements for valid results
-    // var resultContainer = document.querySelector('.result-category-color');
-    var propertyContainer = document.querySelector('.result-property');
+    // var propertyContainer = document.querySelector('.property-results-names');
+    var propertyContainer = document.querySelector('.property-results-grid');
 
     // Clear previous results
     propertyContainer.innerHTML = '';
@@ -362,12 +365,28 @@ function getIndividualWinRateOld(pointsArray, individualPoints){
     return dividedSum;
 }
 
-function makeOutput(numbers, model, resultContainer){
-    const numbersForOutput = numbers.toFixed(5)
+// function makeOutput(numbers, model, resultContainer){
+//     const numbersForOutput = numbers.toFixed(5)
+//     if (!isNaN(numbersForOutput)) {
+//         var output = document.createElement('output');
+//         output.textContent = model + numbersForOutput;
+//         resultContainer.appendChild(output);
+//     }
+// }
+
+function makeOutput(numbers, model, resultContainer) {
+    const numbersForOutput = numbers.toFixed(5);
     if (!isNaN(numbersForOutput)) {
-        var output = document.createElement('output');
-        output.textContent = model + numbersForOutput;
-        resultContainer.appendChild(output);
+        const keySpan = document.createElement('span');
+        keySpan.className = 'property-key';
+        keySpan.textContent = model;
+        
+        const valueSpan = document.createElement('span');
+        valueSpan.className = 'property-value';
+        valueSpan.textContent = numbersForOutput;
+        
+        resultContainer.appendChild(keySpan);
+        resultContainer.appendChild(valueSpan);
     }
 }
 
