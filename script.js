@@ -36,15 +36,15 @@ function orderNumbers() {
 }
 
 function generateNumbers() {
-    var randomBlueNumber = Math.floor(Math.random() * 1001);
-    var randomRedNumber = Math.floor(Math.random() * 1001);
-    var randomGreenNumber = Math.floor(Math.random() * 1001);
-    var randomCircleNumber = Math.floor(Math.random() * 1001);
-    var randomTriangleNumber = Math.floor(Math.random() * 1001);
-    var randomSquareNumber = Math.floor(Math.random() * 1001);
-    var randomChequeredNumber = Math.floor(Math.random() * 1001);
-    var randomStripedNumber = Math.floor(Math.random() * 1001);
-    var randomDottedNumber = Math.floor(Math.random() * 1001);
+    const randomBlueNumber = Math.floor(Math.random() * 1001);
+    const randomRedNumber = Math.floor(Math.random() * 1001);
+    const randomGreenNumber = Math.floor(Math.random() * 1001);
+    const randomCircleNumber = Math.floor(Math.random() * 1001);
+    const randomTriangleNumber = Math.floor(Math.random() * 1001);
+    const randomSquareNumber = Math.floor(Math.random() * 1001);
+    const randomChequeredNumber = Math.floor(Math.random() * 1001);
+    const randomStripedNumber = Math.floor(Math.random() * 1001);
+    const randomDottedNumber = Math.floor(Math.random() * 1001);
 
     // Fill the input fields with the generated numbers
     document.getElementById('Blue').value = randomBlueNumber;
@@ -121,15 +121,11 @@ function calculateSum() {
         let numberOfDomesticMatches = (splits * splits) - splits; 
         // Ta fram hur många gånger en egenskap mött andra egenskaper i samma kategori. (Mött inte sig själv)
         let numberOfForeignMatches = totalPropertyMatches - numberOfDomesticMatches;
-        // let categoryTotalValue = 0;
-        // map.forEach((value, key) => {
-        //     categoryTotalValue += value[0];
-        // })
+
         map.forEach((value, key) => {
             map.get(key).push(totalPropertyMatches);
             map.get(key).push(numberOfDomesticMatches);
             map.get(key).push(numberOfForeignMatches);
-            // map.get(key).push(categoryTotalValue); // /map-size
         })
     })
     
@@ -152,12 +148,10 @@ function calculateSum() {
     });
 
     // Create new output elements for valid results
-    // var individualsContainer = document.querySelector('.individuals-container');
-    var individualsContainer = document.querySelector('.individual-results-grid');
+    const individualsContainer = document.querySelector('.individual-results-grid');
 
     // Clear previous results
     individualsContainer.innerHTML = '';
-    individualsContainer.scrollTop = 0;
 
     mapOfIndividualsWinRate.forEach((value, key) => {
         makeOutput(value, key, individualsContainer)
@@ -207,8 +201,7 @@ function calculateSum() {
     });
 
     // Create new output elements for valid results
-    // var propertyContainer = document.querySelector('.property-results-names');
-    var propertyContainer = document.querySelector('.property-results-grid');
+    const propertyContainer = document.querySelector('.property-results-grid');
 
     // Clear previous results
     propertyContainer.innerHTML = '';
@@ -280,26 +273,6 @@ function getWinRate(numberOfDomesticMatches, numberOfForeignMatches, avgProperty
     return finalWinRate;
 }
 
-function getIndividualWinRateOld(pointsArray, individualPoints){
-    let sum = 0;
-    let individualIndex = pointsArray.indexOf(individualPoints);
-    pointsArray.forEach((element, index) => {
-        if(index != individualIndex){
-            sum += individualPoints / (element + individualPoints);
-        };
-    });
-    let dividedSum = sum / (pointsArray.length - 1);
-    return dividedSum;
-}
-
-// function makeOutput(numbers, model, resultContainer){
-//     const numbersForOutput = numbers.toFixed(5)
-//     if (!isNaN(numbersForOutput)) {
-//         var output = document.createElement('output');
-//         output.textContent = model + numbersForOutput;
-//         resultContainer.appendChild(output);
-//     }
-// }
 
 function makeOutput(numbers, model, resultContainer) {
     const numbersForOutput = numbers.toFixed(5);
