@@ -1,114 +1,41 @@
-function orderNumbers() { // Borde gå att make DRY
+function orderNumbers() {
+    const containers = [
+        {
+            container: document.querySelector('.individual-results-grid'),
+            widthContainer: null
+        },
+        {
+            container: document.querySelector('.property-results-grid'),
+            widthContainer: null
+        }
+    ];
 
-    // FIGHTERS
+    containers.forEach(({container}) => {
+        if (!container) return;
 
-    // Create new output elements for valid results
-    var individualsContainer = document.querySelector('.individuals-container');
-    var outputs = individualsContainer.getElementsByTagName('output');
-    var numbers = [];
+        const pairs = [];
+        const keySpans = container.querySelectorAll('.property-key');
+        const valueSpans = container.querySelectorAll('.property-value');
 
-    // Collect the numbers from the outputs
-    for (var i = 0; i < outputs.length; i++) {
-        var text = outputs[i].textContent;
-        var number = parseInt(text.match(/\d+/)[0]); // Extract the number
-        numbers.push({ model: text.replace(number, '').trim(), value: number });
-    }
+        keySpans.forEach((keySpan, i) => {
+            const value = parseFloat(valueSpans[i].textContent);
+            pairs.push({
+                key: keySpan.textContent,
+                value: value
+            });
+        });
 
-    // Sort the numbers in descending order
-    numbers.sort(function(a, b) {
-        return b.value - a.value;
+        pairs.sort((a, b) => b.value - a.value);
+
+        container.innerHTML = '';
+
+        pairs.forEach(pair => {
+            makeOutput(pair.value, pair.key, container);
+        });
     });
-
-    // Clear previous results
-    individualsContainer.innerHTML = '';
-
-    // Append sorted outputs
-    for (var i = 0; i < numbers.length; i++) {
-        makeOutput(numbers[i].value, numbers[i].model, individualsContainer);
-    }
-
-    // COLOR //
-
-    // Create new output elements for valid results
-    resultContainer = document.querySelector('.result-category-color');
-    outputs = resultContainer.getElementsByTagName('output');
-    numbers = [];
-
-    // Collect the numbers from the outputs
-    for (var i = 0; i < outputs.length; i++) {
-        var text = outputs[i].textContent;
-        var number = parseInt(text.match(/\d+/)[0]); // Extract the number
-        numbers.push({ model: text.replace(number, '').trim(), value: number });
-    }
-
-    // Sort the numbers in descending order
-    numbers.sort(function(a, b) {
-        return b.value - a.value;
-    });
-
-    // Clear previous results
-    resultContainer.innerHTML = '';
-
-    // Append sorted outputs
-    for (var i = 0; i < numbers.length; i++) {
-        makeOutput(numbers[i].value, numbers[i].model, resultContainer);
-    }
-
-    // Gör en array som bara består av numrena från numbers-arrayen
-    values = numbers.map(function(element) {
-        return element.value;
-    });
-    // Det högsta minus det minsta värdet gör variationsbredden på procenten för color
-    var highestValue = Math.max(...values);
-    var lowestValue = Math.min(...values);
-    var procentWidth = highestValue - lowestValue;
-    resultContainer = document.querySelector('#color-wide-id');
-    resultContainer.innerHTML = '';
-    makeOutput(procentWidth, "Bredd: ", document.querySelector('#color-wide-id'));
-
-    // SHAPES
-
-    // Create new output elements for valid results
-    resultContainer = document.querySelector('.result-category-shape');
-    outputs = resultContainer.getElementsByTagName('output');
-    numbers = [];
-
-    // Collect the numbers from the outputs
-    for (var i = 0; i < outputs.length; i++) {
-        var text = outputs[i].textContent;
-        var number = parseInt(text.match(/\d+/)[0]); // Extract the number
-        numbers.push({ model: text.replace(number, '').trim(), value: number });
-    }
-
-    // Sort the numbers in descending order
-    numbers.sort(function(a, b) {
-        return b.value - a.value;
-    });
-
-    // Clear previous results
-    resultContainer.innerHTML = '';
-
-    // Append sorted outputs
-    for (var i = 0; i < numbers.length; i++) {
-        makeOutput(numbers[i].value, numbers[i].model, resultContainer);
-    }
-
-    // Gör en array som bara består av numrena från numbers-arrayen
-    values = numbers.map(function(element) {
-        return element.value;
-    });
-    // Det högsta minus det minsta värdet gör variationsbredden på procenten för color
-    highestValue = Math.max(...values);
-    lowestValue = Math.min(...values);
-    procentWidth = highestValue - lowestValue;
-    resultContainer = document.querySelector('#shape-wide-id');
-    resultContainer.innerHTML = '';
-    makeOutput(procentWidth, "Bredd: ", document.querySelector('#shape-wide-id'));
-    
 }
 
 function generateNumbers() {
-    // Generate random numbers between 0 and 1000
     var randomBlueNumber = Math.floor(Math.random() * 1001);
     var randomRedNumber = Math.floor(Math.random() * 1001);
     var randomGreenNumber = Math.floor(Math.random() * 1001);
