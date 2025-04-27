@@ -1,7 +1,12 @@
-What is your win chanses in a 1v1 competition?
+What is your win chanse in a 1v1 competition?
 
 Setting points to properties we can see the win chance of each property
 and of each individual participating in the competition.
+
+Set the properties colors, shapes, and patterns manually,
+or click the Random button, to set points to the properties.
+Then click Go to see the win chances of properties and invididuals.
+To sort them by highest win chance click Sort.
 
 -----------------
 
