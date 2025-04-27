@@ -155,7 +155,8 @@ input{
 
 
 .properties-container, .individuals-container{
-    background-color: rgb(231, 224, 231);
+    /* background-color: rgb(231, 224, 231); */
+    background-color: rgb(231, 224, 150);
     width: 41.5%;
     height: 97.7vh;
     border: 1px solid;  
