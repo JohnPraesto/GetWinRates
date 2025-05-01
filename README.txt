@@ -1,4 +1,4 @@
-What is your win chanse in a 1v1 competition?
+What is your win chance in a 1v1 competition?
 
 Setting points to properties we can see the win chance of each property
 and of each individual participating in the competition.
